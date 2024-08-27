@@ -8,6 +8,7 @@ import ContactUs from "./Pages/ContactUs";
 import FooterComponent from "./components/FooterComponent";
 import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
+import Dashboard from "./Pages/Dashboard";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </div>
         <FooterComponent />

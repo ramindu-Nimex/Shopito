@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { app } from "../firebase";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
+import { useDispatch } from 'react-redux'
 
 export default function DashProfile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -18,9 +20,7 @@ export default function DashProfile() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
-  
-
-  const handleChange = (e) => {};
+  const dispatch = useDispatch()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -59,9 +59,50 @@ export default function DashProfile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL)
+          setFormData({...formData, profilePicture: downloadURL})
+          setImageFileUploading(false)
         })
       }
     )
+  }
+
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.id]: e.target.value})
+  };
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    if(Object.keys(formData).length === 0) {
+      setUpdateUserError('No changes made')
+      return
+    }
+
+    if(imageFileUploading) {
+      setUpdateUserError('Please wait for image to upload')
+      return
+    }
+
+    try {
+      dispatch(updateStart())
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      const data = await res.json()
+      if(!res.ok) {
+        dispatch(updateFailure(data.message))
+        setUpdateUserError(data.message)
+      } else {
+        dispatch(updateSuccess(data))
+        setUpdateUserSuccess("User's Profile Updated Successfully")
+      }
+    } catch (error) {
+      dispatch(updateFailure(error.message))
+      setUpdateUserError(error.message)
+    }
   }
 
   return (
@@ -69,7 +110,7 @@ export default function DashProfile() {
       <h1 className="text-3xl text-center my-6 font-extrabold underline text-blue-950 dark:text-slate-300">
         Profile
       </h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           accept="image/*"
@@ -139,6 +180,12 @@ export default function DashProfile() {
         <span className="cursor-pointer">Delete Account</span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+      {
+        updateUserSuccess && <Alert className="mt-7 py-3 bg-gradient-to-r from-green-200 via-green-300 to-green-400 shadow-sm text-center text-green-800 text-base tracking-wide animate-bounce">{updateUserSuccess}</Alert>
+      }
+      {
+        updateUserError && <Alert className="mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-sm text-center text-red-600 text-base tracking-wide animate-bounce">{updateUserError}</Alert>
+      }
     </div>
   );
 }

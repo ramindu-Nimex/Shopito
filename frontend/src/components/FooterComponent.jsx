@@ -10,7 +10,7 @@ const FooterComponent = () => {
          <div className="grid w-full justify-between sms:flex md:grid-cols-1">
             <div className="mt-5">
                <Link to='/' className="self-center">
-                  <img src={favicon} alt="logo"  />
+                  {/* <img src={favicon} alt="logo"  /> */}
                </Link>
             </div>
             <div className="grid grid-cols-2 gap-8 mt-4 sms:grid-cols-3 md:grid-cols-4 sm:gap-6">

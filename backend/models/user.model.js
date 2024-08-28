@@ -25,6 +25,22 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isUserAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isInventoryAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isOutletAndShopAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isShoppingOrderAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

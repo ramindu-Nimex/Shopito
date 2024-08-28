@@ -56,6 +56,10 @@ export const signIn = async (req, res, next) => {
       {
         id: validUser._id,
         isAdmin: validUser.isAdmin,
+        isUserAdmin: validUser.isUserAdmin,
+        isInventoryAdmin: validUser.isInventoryAdmin,
+        isOutletAndShopAdmin: validUser.isOutletAndShopAdmin,
+        isShoppingOrderAdmin: validUser.isShoppingOrderAdmin,
       },
       process.env.JWT_SECRET
     );
@@ -81,6 +85,10 @@ export const google = async (req, res, next) => {
         {
           id: user._id,
           isAdmin: user.isAdmin,
+          isUserAdmin: user.isUserAdmin,
+          isInventoryAdmin: user.isInventoryAdmin,
+          isOutletAndShopAdmin: user.isOutletAndShopAdmin,
+          isShoppingOrderAdmin: user.isShoppingOrderAdmin,
         },
         process.env.JWT_SECRET
       );
@@ -109,6 +117,10 @@ export const google = async (req, res, next) => {
         {
           id: newUser._id,
           isAdmin: newUser.isAdmin,
+          isUserAdmin: newUser.isUserAdmin,
+          isInventoryAdmin: newUser.isInventoryAdmin,
+          isOutletAndShopAdmin: newUser.isOutletAndShopAdmin,
+          isShoppingOrderAdmin: newUser.isShoppingOrderAdmin,
         },
         process.env.JWT_SECRET
       );

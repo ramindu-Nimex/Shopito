@@ -1,6 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { FaRobot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
@@ -48,6 +49,16 @@ export default function DashSidebar() {
               as="div"
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to="/dashboard?tab=shoppingAssistant">
+            <Sidebar.Item
+              active={tab === "shoppingAssistant"}
+              icon={FaRobot}
+              labelColor="dark"
+              as="div"
+            >
+              Shopping Assistant
             </Sidebar.Item>
           </Link>
           <Sidebar.Item

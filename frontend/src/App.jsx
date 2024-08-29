@@ -10,6 +10,8 @@ import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
+import DashOrder from "./components/IT22607232_Components/DashOrderComponent";
+import OrderCart from "./Pages/IT22607232_Pages/ShopitoMart";
 
 const App = () => {
   return (
@@ -23,8 +25,11 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/" element={<DashOrder/>} />
+            
             <Route element={<PrivateRoute />} >
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/OrderCart" element={<OrderCart />} />
             </Route>
           </Routes>
         </div>

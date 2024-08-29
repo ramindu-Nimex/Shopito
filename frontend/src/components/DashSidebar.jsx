@@ -1,6 +1,6 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiOutlineShoppingBag, HiUser } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
@@ -21,19 +21,19 @@ export default function DashSidebar() {
 
   const handleSignOut = async () => {
     try {
-      const res = await fetch('/api/user/signout', {
-        method: 'POST'
-      })
-      const data = await res.json()
-      if(!res.ok) {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
         console.log(data.message);
       } else {
-        dispatch(signOutSuccess())
+        dispatch(signOutSuccess());
       }
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <Sidebar className="w-full md:w-56 shadow-md">
@@ -50,6 +50,21 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
+
+          {currentUser && !currentUser.isAdmin && (
+            <>
+              <Link to="/dashboard?tab=orderUserDash">
+                <Sidebar.Item
+                  active={tab === "orderUserDash"}
+                  icon={HiOutlineShoppingBag}
+                  as="div"
+                >
+                  Order Dashboard
+                </Sidebar.Item>
+              </Link>
+            </>
+          )}
+
           <Sidebar.Item
             icon={HiArrowSmRight}
             className="cursor-pointer"

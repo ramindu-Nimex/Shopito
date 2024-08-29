@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dbConnection from "./dbConfig/dbConnection.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+
 //
 import inventoryRoutes from "./routes/IT22003546_Routes/inventory.route.js";
 
@@ -20,7 +21,9 @@ import inventoryRoutes from "./routes/IT22003546_Routes/inventory.route.js";
 
 
 
-//
+//IT22607232 Routes
+import ShopitoMartRoutes from "./routes/IT22607232_Routes/ShopitoMart.route.js";
+
 
 
 
@@ -52,14 +55,15 @@ app.use("/api/inventory", inventoryRoutes);
 
 
 
-//Ramindu
+//IT22577160 Routes
 
 
 
 
 
 
-//samidi 
+//IT22607232 Routes
+app.use("/api/ShopitoMart", ShopitoMartRoutes);
 
 
 

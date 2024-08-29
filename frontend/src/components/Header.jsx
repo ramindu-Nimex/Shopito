@@ -97,7 +97,7 @@ const Header = () => {
         </Navbar.Link>
         <Navbar.Link active={path === "/"} as={"div"}>
           <Link
-            to="/OrderCart"
+            to="/ShopitoMart"
             className="hover:text-orange-500 active:text-orange-600 hover:underline"
           >
             Shopito Mart

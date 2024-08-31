@@ -11,6 +11,9 @@ import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 
+import ShopCreate from "./Pages/IT22350114_Pages/ShopFormPage.jsx";
+import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
+
 const App = () => {
   return (
     <>
@@ -23,6 +26,9 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/create-shop" element={<ShopCreate />} />
+            <Route path="/shop-list" element={<ShopListPage />} />
+
             <Route element={<PrivateRoute />} >
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>

@@ -50,6 +50,23 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
+
+      {currentUser.isAdmin && (    
+        <>
+          <Link to="/dashboard?tab=inventory">
+            <Sidebar.Item
+              active={tab === "inventory"}
+              icon={HiUser}
+              label="Inventory"
+              labelColor="dark"
+              as="div"
+            >
+              Inventory
+            </Sidebar.Item>
+          </Link>
+        </>
+      )}
+      
           <Sidebar.Item
             icon={HiArrowSmRight}
             className="cursor-pointer"

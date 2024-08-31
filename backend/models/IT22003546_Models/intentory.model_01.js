@@ -1,44 +1,63 @@
 import mongoose from 'mongoose';
 
 const InventorySchema = new mongoose.Schema({
+    shopID: 
+    { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Shop', 
+        required: false },
+    
+    productID: 
+    { 
+        type: String, 
+        required: true },
+    
+    productName: 
+    { 
+        type: String, 
+        required: false },
+    
+    productCategory: 
+    { 
+        type: String, 
+        required: false },
+    
+    productDescription: 
+    { 
+        type: String },
+    
+    attributes: [
+        {
+            key: { type: String, required: false },
+            value: { type: String, required: false }
+        }
+    ],
+    
+    variations: [
+        {
+            variantName: { type: String, required: false },
+            quantity: { type: Number, required: false },
+            price: { type: Number, required: false },
+            images: [{ type: String }]
+        }
+    ],
 
-    productID: {
-        type: String,
-        required: true
+    imageURLs:
+    {
+        type: Array,
     },
-    productName: {
-        type: String,
-        required: true
-    },
-    productCategory: {
-        type: String,
-        required: true
-    },
-    productPrice: {
-        type: Number,
-        required: true
-    },
-    productQuantity: {
-        type: Number,
-        required: true
-    },
-    productDescription: {
-        type: String,
-        required: true
-    },
-    productImage: {
-        type: String,
-        required: true
-    },
-    productStatus: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    }
-}, { timestamps: true });
+    
+    date: 
+    { 
+        type: Date, 
+        default: Date.now },
+    
+    productStatus: 
+    { 
+        type: String, 
+        default: "Available" }
+});
+
 
 const Inventory = mongoose.model('Inventory', InventorySchema);
 export default Inventory;

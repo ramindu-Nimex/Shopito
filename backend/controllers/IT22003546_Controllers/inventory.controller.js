@@ -44,12 +44,12 @@ export const updateInventory = async (req, res) => {
 }
 
 // Delete Inventory
-export const deleteInventory = async (req, res) => {
+export const deleteInventory = async (req, res, next) => {
     try {
-        await Inventory.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: "Inventory deleted successfully" });
+        const { Inventoryid } = req.params;
+        await Inventory.findByIdAndDelete(Inventoryid);
+        return res.status(200).json({ message: "Inventory deleted successfully" });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        next(error);
     }
 }
-

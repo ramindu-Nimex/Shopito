@@ -2,22 +2,59 @@ import mongoose from "mongoose";
 
 const shopListingSchema = new mongoose.Schema(
   {
-    name: {
+    shopID: {
+      type: String,
+      required: true
+    },
+    shopName: {
       type: String,
       required: true,
     },
-    location: {
+    shopLocation: {
       type: String,
       required: true,
     },
-    description: {
+    shopDescription: {
       type: String,
       required: true,
     },
-    category: {
+    shopCategory: {
       type: String,
       required: true,
     },
+    shopPhone: {
+      type: String,
+      required: false
+    },
+    shopEmail: {
+      type: String,
+      required: false
+    },
+    shopWbsite: {
+      type: String,
+      required: false
+    },
+    shopOpeningHours: {
+      type: String,
+      required: false
+    },
+    isOpen: {
+      type: Boolean,
+      default: true,
+      required: false
+    },
+    imageUrls: {
+      type: Array,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   { timestamps: true }
 );

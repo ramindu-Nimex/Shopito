@@ -15,7 +15,7 @@ const ShopList = () => {
     }
   }, [currentUser._id]);
 
-  // Fetch service listings from the database
+  // Fetch shop listings from the database
   const fetchShopListings = async () => {
     try {
       const response = await fetch("/api/shopListings/read");
@@ -38,7 +38,7 @@ const ShopList = () => {
   }
 
   if (error) {
-    return <div>Error loading service listings. Please try again later.</div>;
+    return <div>Error loading shop listings. Please try again later.</div>;
   }
 
   return (
@@ -49,10 +49,11 @@ const ShopList = () => {
       {currentUser?.isAdmin && (
         <Table hoverable className="w-full">
           <Table.Head>
-            <Table.HeadCell>Service ID</Table.HeadCell>
-            <Table.HeadCell>Service Name</Table.HeadCell>
+            <Table.HeadCell>Shop Name</Table.HeadCell>
+            <Table.HeadCell>Location</Table.HeadCell>
             <Table.HeadCell>Description</Table.HeadCell>
-            <Table.HeadCell>Price</Table.HeadCell>
+            <Table.HeadCell>Category</Table.HeadCell>
+
             <Table.HeadCell>Type</Table.HeadCell>
             <Table.HeadCell>Availability</Table.HeadCell>
             <Table.HeadCell>Phone</Table.HeadCell>
@@ -66,9 +67,10 @@ const ShopList = () => {
               <Table.Body key={shop._id} className="divide-y-0">
                 <Table.Row>
                   <Table.Cell>{shop.name}</Table.Cell>
-                  <Table.Cell>{shop.serviceName}</Table.Cell>
-                  <Table.Cell>{shop.serviceDescription}</Table.Cell>
-                  <Table.Cell>{shop.servicePrice}</Table.Cell>
+                  <Table.Cell>{shop.location}</Table.Cell>
+                  <Table.Cell>{shop.description}</Table.Cell>
+                  <Table.Cell>{shop.category}</Table.Cell>
+
                   <Table.Cell>{shop.serviceType}</Table.Cell>
                   <Table.Cell>{shop.serviceAvailability}</Table.Cell>
                   <Table.Cell>{shop.servicePhone}</Table.Cell>
@@ -91,7 +93,7 @@ const ShopList = () => {
             <Table.Body>
               <Table.Row>
                 <Table.Cell colSpan="10" className="text-center">
-                  No service listings found.
+                  No shop listings found.
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
@@ -100,11 +102,10 @@ const ShopList = () => {
       )}
       <div className="flex gap-2 items-center">
                     <Button> 
-                        <Link to="/create-shop">Create Amenity</Link>
+                        <Link to="/create-shop">Add New Shop</Link>
                     </Button>
                     </div>
     </div>
-    
   );
 };
 

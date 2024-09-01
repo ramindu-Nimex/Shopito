@@ -30,7 +30,7 @@ const shopListingSchema = new mongoose.Schema(
       type: String,
       required: false
     },
-    shopWbsite: {
+    shopWebsite: {
       type: String,
       required: false
     },
@@ -47,14 +47,6 @@ const shopListingSchema = new mongoose.Schema(
       type: Array,
       required: true
     },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now
-    }
   },
   { timestamps: true }
 );

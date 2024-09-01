@@ -41,70 +41,104 @@ const ShopList = () => {
     return <div>Error loading shop listings. Please try again later.</div>;
   }
 
+  const handleShopDelete = async (_id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this shop?"
+    );
+    if (!confirmDelete) {
+    }
+    try {
+      const res = await fetch(`/api/shopListings/delete/${_id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      //setShowShops((prev) => prev.filter((shop) => shop._id !== _id));
+      await fetchShopListings(); 
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="w-full table-auto">
       <h1 className="text-center mt-7 font-extrabold text-3xl underline">
         Service Listing
-      </h1>
+      </h1> 
       {currentUser?.isAdmin && (
-        <Table hoverable className="w-full">
-          <Table.Head>
-            <Table.HeadCell>Shop Name</Table.HeadCell>
-            <Table.HeadCell>Location</Table.HeadCell>
-            <Table.HeadCell>Description</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-
-            <Table.HeadCell>Type</Table.HeadCell>
-            <Table.HeadCell>Availability</Table.HeadCell>
-            <Table.HeadCell>Phone</Table.HeadCell>
-            <Table.HeadCell>Email</Table.HeadCell>
-            <Table.HeadCell>Requirements</Table.HeadCell>
-            <Table.HeadCell>Images</Table.HeadCell>
-          </Table.Head>
-
-          {shopListing.length > 0 ? (
-            shopListing.map((shop) => (
-              <Table.Body key={shop._id} className="divide-y-0">
+        <div className="w-full overflow-x-hidden">
+        
+        <div className="overflow-x-auto">
+          <Table hoverable className="min-w-full bg-white shadow-md rounded-lg">
+            <Table.Head className="bg-gray-50">
+              <Table.HeadCell className="px-4 py-2 text-left">Shop Name</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Location</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Description</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Category</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Phone</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Email</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Website</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Opening Hours</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Status</Table.HeadCell>
+              <Table.HeadCell className="px-4 py-2 text-left">Actions</Table.HeadCell>
+            </Table.Head>
+      
+            {shopListing.length > 0 ? (
+              shopListing.map((shop) => (
+                <Table.Body key={shop._id} className="divide-y">
+                  <Table.Row className="hover:bg-gray-50">
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopName}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopLocation}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopDescription}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopCategory}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopPhone}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopEmail}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">
+                      <a
+                        href={shop.shopWebsite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        {shop.shopWebsite}
+                      </a>
+                    </Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopOpeningHours}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.isOpen ? "Open" : "Closed"}</Table.Cell>
+                    <Table.Cell className="px-4 py-2 whitespace-nowrap">
+                      <span
+                        onClick={() => handleShopDelete(shop._id)}
+                        className="text-red-500 hover:underline cursor-pointer"
+                      >
+                        Delete
+                      </span>
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              ))
+            ) : (
+              <Table.Body>
                 <Table.Row>
-                  <Table.Cell>{shop.name}</Table.Cell>
-                  <Table.Cell>{shop.location}</Table.Cell>
-                  <Table.Cell>{shop.description}</Table.Cell>
-                  <Table.Cell>{shop.category}</Table.Cell>
-
-                  <Table.Cell>{shop.serviceType}</Table.Cell>
-                  <Table.Cell>{shop.serviceAvailability}</Table.Cell>
-                  <Table.Cell>{shop.servicePhone}</Table.Cell>
-                  <Table.Cell>{shop.serviceEmail}</Table.Cell>
-                  <Table.Cell>{shop.serviceRequirements}</Table.Cell>
-                  <Table.Cell>
-                    {shop.imageUrls?.map((imageUrl, index) => (
-                      <img
-                        key={index}
-                        src={imageUrl}
-                        alt={`Service Image ${index}`}
-                        style={{ width: "100px", height: "100px" }}
-                      />
-                    ))}
+                  <Table.Cell colSpan="10" className="px-4 py-2 text-center">
+                    No shop listings found.
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
-            ))
-          ) : (
-            <Table.Body>
-              <Table.Row>
-                <Table.Cell colSpan="10" className="text-center">
-                  No shop listings found.
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          )}
-        </Table>
+            )}
+          </Table>
+        </div>
+      </div>
+      
       )}
       <div className="flex gap-2 items-center">
-                    <Button> 
-                        <Link to="/create-shop">Add New Shop</Link>
-                    </Button>
-                    </div>
+        <Button>
+          <Link to="/create-shop">Add New Shop</Link>
+        </Button>
+      </div>
     </div>
   );
 };

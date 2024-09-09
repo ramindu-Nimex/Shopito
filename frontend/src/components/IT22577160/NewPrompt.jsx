@@ -20,7 +20,7 @@ export default function NewPrompt() {
     history: [
       {
         role: "user",
-        parts: [{ text: "Hello, I have 2 dogs in my house" }],
+        parts: [{ text: "Hello, I have 20000 sri Lankan rupees and I want to casual wear from one galle face mall in colombo are You can suggest? dress trousers Nike shoes T-shirt" }],
       },
       {
         role: "model",
@@ -82,7 +82,7 @@ export default function NewPrompt() {
         </div>
       )}
       <div className="pb-24" ref={endRef} />
-      <form className="newForm" onSubmit={handleSubmit}>
+      <form className="newForm fixed" onSubmit={handleSubmit}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" name="text" placeholder="Ask anything..." />

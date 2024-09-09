@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dbConnection from "./dbConfig/dbConnection.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import chatRoutes from "./routes/IT22577160/chat.route.js";
 import ImageKit from "imagekit";
 
 const app = express();
@@ -26,7 +27,7 @@ app.listen(3000, () => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/chat", chatRoutes);
 
 app.get("/api/upload", (req, res) => {
   try {

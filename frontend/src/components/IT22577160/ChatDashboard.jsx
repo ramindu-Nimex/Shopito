@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import CustomChatDashSideBar from './../IT22577160/CustomChatDashSideBar';
-import DashboardChatRoom from './DashboardChatRoom';
 
 export default function ChatDashboard() {
   return (

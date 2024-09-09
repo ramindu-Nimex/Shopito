@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function ChatDashboardIntro() {
   const { currentUser } = useSelector((state) => state.user);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

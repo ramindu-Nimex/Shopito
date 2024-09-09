@@ -1,25 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import { Sidebar } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 export default function CustomChatDashSideBar() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["userChats"],
+    queryFn: async () => {
+      const response = await fetch("/api/chat/userChats", {
+        credentials: "include",
+      });
+      const result = await response.json();
+      console.log(result); // Log the result
+      return result;
+    },
+  });
   return (
-    <Sidebar className="fixed z-10">
+    <Sidebar className="fixed z-10 flex flex-col">
       <span className="font-semibold text-sm mb-3">DASHBOARD</span>
+      <div className="pt-5">
+      <Link to="/dashboard/chats">Create a new Chat</Link>
+      </div>
       <hr className="border-none h-[2px] bg-slate-200 opacity-10 rounded-md my-5" />
       <span className="font-semibold text-sm mb-3">RECENT CHATS</span>
       <div className="flex flex-col overflow-scroll my-5 gap-2">
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
-        <Link to="/">My Chat List</Link>
+        {isPending
+        ? "Loading..."
+        : error
+        ? "Something went wrong!"
+        : Array.isArray(data)
+        ? data.map((chat) => (
+            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+              {chat.title}
+            </Link>
+          ))
+        : "No chats available"} {/* Handle non-array data */}
       </div>
       <hr className="border-none h-[2px] bg-slate-200 opacity-10 rounded-md my-5" />
       <div className="mt-auto flex items-center gap-3 flex-col text-xs">

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "./components/Header"
+import Header from "./components/Header";
 import HomePage from "./Pages/HomePage";
 import AboutUsPage from "./Pages/AboutUsPage";
 import ContactUs from "./Pages/ContactUs";
@@ -10,6 +10,9 @@ import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
+import ChatDashboard from "./components/IT22577160/ChatDashboard";
+import DashboardChatRoom from "./components/IT22577160/DashboardChatRoom";
+import ChatDashboardIntro from "./components/IT22577160/ChatDashboardIntro";
 
 const App = () => {
   return (
@@ -23,12 +26,22 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-            <Route element={<PrivateRoute />} >
+            <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route element={<ChatDashboard />}>
+                <Route
+                  path="/dashboard/chats"
+                  element={<ChatDashboardIntro />}
+                />
+                <Route
+                  path="/dashboard/chats/:id"
+                  element={<DashboardChatRoom />}
+                />
+              </Route>
             </Route>
           </Routes>
         </div>
-        <FooterComponent />
+        {/* <FooterComponent /> */}
       </Router>
       <ToastContainer
         position="bottom-center"
@@ -43,7 +56,7 @@ const App = () => {
         theme="dark"
       />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

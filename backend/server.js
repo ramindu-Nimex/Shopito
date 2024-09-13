@@ -4,11 +4,20 @@ import cookieParser from "cookie-parser";
 import dbConnection from "./dbConfig/dbConnection.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import chatRoutes from "./routes/IT22577160/chat.route.js";
+import ImageKit from "imagekit";
 
 const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
+
+// Initialize ImageKit
+const imagekit = new ImageKit({
+  urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
+  publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
+});
 
 dbConnection();
 
@@ -18,6 +27,16 @@ app.listen(3000, () => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/chat", chatRoutes);
+
+app.get("/api/upload", (req, res) => {
+  try {
+    const result = imagekit.getAuthenticationParameters();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to generate authentication parameters." });
+  }
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

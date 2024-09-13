@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 const FooterComponent = () => {
   return (
-    <Footer container className="border border-t-8 border-indigo-600 shadow-md">
+    <Footer container className="border border-t-8 border-indigo-600 shadow-md z-50">
       <div className="w-full max-w-7xl mx-auto">
         <div className="grid w-full justify-between sms:flex md:grid-cols-1">
           <div className="mt-5">

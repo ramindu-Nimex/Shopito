@@ -16,7 +16,9 @@ export default function CustomChatDashSideBar() {
   });
   return (
     <Sidebar className="fixed z-10 flex flex-col">
-      <span className="font-semibold text-sm mb-3">DASHBOARD</span>
+      <Link to="/dashboard/chats">
+        <span className="font-semibold text-sm mb-3">DASHBOARD</span>
+      </Link>
       <div className="pt-5">
       <Link to="/dashboard/chats">Create a new Chat</Link>
       </div>

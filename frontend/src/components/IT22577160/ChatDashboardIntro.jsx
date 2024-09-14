@@ -42,7 +42,7 @@ export default function ChatDashboardIntro() {
           </div>
         </div>
       </div> */}
-      <div className="formContainer">
+      <div className="formContainer mx-[500px]">
         <form onSubmit={handleSubmit} className='fixed bottom-0'>
           <input type="text" name="text" placeholder="Ask me anything..." />
           <button>

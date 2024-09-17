@@ -27,11 +27,12 @@ export default function Homepage() {
     <div className="homepage">
       <img src="/orbital.png" alt="" className="orbital" />
       <div className="left">
-        <h1 className="ml-5 font-semibold">ShopI Bot</h1>
-        <h2>Supercharge your creativity and productivity</h2>
-        <h3>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat sint
-          dolorem doloribus, architecto dolor.
+        <h1 className="ml-6 font-semibold">ShopI Bot</h1>
+        <h2 className="text-2xl font-semibold">Supercharge your creativity and productivity</h2>
+        <h3 className="text-xs font-medium">
+          Meet Shopito Bot, your personal shopping genie! With a quick chat, it
+          curates the perfect picks tailored to your style, budget, and
+          preferences.
         </h3>
         <Link to="/dashboard/chats" className="mt-5">
           <div className="flex flex-col p-3 dark:bg-slate-800 bg-slate-200 gap-4 md:w-96 rounded-md shadow-md w-full">
@@ -67,22 +68,22 @@ export default function Homepage() {
             <TypeAnimation
               sequence={[
                 // Same substring at the start will only be typed out once, initially
-                "Human: We produce food for Mice",
+                "Human: Shop smarter, with personalized picks",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot: We produce food for Hamsters",
+                "Bot: your satisfaction is our priority.",
                 2000,
                 () => {
                   setTypingStatus("human2");
                 },
-                "Human2: We produce food for Guinea Pigs",
+                "Human2: one conversation at a time",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot: We produce food for Chinchillas",
+                "Bot: Discover your perfect style",
                 2000,
                 () => {
                   setTypingStatus("human1");

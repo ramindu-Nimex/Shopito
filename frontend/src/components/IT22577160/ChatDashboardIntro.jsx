@@ -1,10 +1,11 @@
-import React from 'react'
+import React from "react";
 import "./chatDashboardIntro.css";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function ChatDashboardIntro() {
   const { currentUser } = useSelector((state) => state.user);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -18,14 +19,22 @@ export default function ChatDashboardIntro() {
       },
       body: JSON.stringify({ text, userId: currentUser._id }),
     });
-  }
-  
+  };
+
   return (
     <div className="dashboardPage">
       {/* <div className="texts">
-      <div className="logo">
-          <img src="/logo.png" alt="" />
-          <h1>RAMA AI</h1>
+        <div className="logo text-center">
+          <Link
+            to="/"
+            className="self-center whitespace-nowrap text-sm sm:text-xl font-bold dark:text-white"
+          >
+            <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-lg">
+              Shop
+            </span>
+            Ito
+          </Link>
+          <h1>ShopI Bot</h1>
         </div>
         <div className="options">
           <div className="option">
@@ -43,7 +52,7 @@ export default function ChatDashboardIntro() {
         </div>
       </div> */}
       <div className="formContainer mx-[500px]">
-        <form onSubmit={handleSubmit} className='fixed bottom-0'>
+        <form onSubmit={handleSubmit} className="fixed bottom-0">
           <input type="text" name="text" placeholder="Ask me anything..." />
           <button>
             <img src="/arrow.png" alt="" />
@@ -51,5 +60,5 @@ export default function ChatDashboardIntro() {
         </form>
       </div>
     </div>
-  )
+  );
 }

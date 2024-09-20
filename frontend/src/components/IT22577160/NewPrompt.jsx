@@ -133,7 +133,7 @@ export default function NewPrompt({ data }) {
         </div>
       )}
       <div className="pb-24" ref={endRef} />
-      <form className="newForm fixed" onSubmit={handleSubmit} ref={formRef}>
+      <form className="newForm dark:bg-slate-800 bg-slate-200 fixed" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" name="text" placeholder="Ask anything..." />

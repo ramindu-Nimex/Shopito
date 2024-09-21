@@ -1,229 +1,207 @@
-import {
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineEye,
-  AiOutlineHeart,
-  AiOutlineSearch,
-  AiOutlineShoppingCart,
-  AiOutlineStar,
-} from "react-icons/ai";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import ShopitoMartHeader from "../../components/IT22607232_Components/ShopitoMartHeader";
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { Alert, Button, FileInput, Select, TextInput, Textarea } from "flowbite-react"
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { app } from '../../firebase';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
-const ShopitoMart = () => {
-  const [resources, setResources] = useState([]);
-  const [showMore, setShowMore] = useState(false);
-  const [click, setClick] = useState(false);
-  const dispatch = useDispatch();
-  //const { cart } = useSelector((state) => state.cart);
-  //const { rating } = useSelector((state) => state.rating);
+export default function ShopitoMart() {
+  const [file, setFile] = useState(null);
+   const [imageUploadProgress, setImageUploadProgress] = useState(null);
+   const [imageUploadError, setImageUploadError] = useState(null);
+   const [formData, setFormData] = useState({
+      title: '',
+      shop: '',
+      category: '',
+      image: '',
+      quantity: '',
+      condition: '',
+      description: '',
+      offer: false,
+      regularPrice: 25,
+      discountPrice: 0
+   })
+   const [error, setError] = useState(null);
+   const navigate = useNavigate()
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const res = await fetch("/api/ShopitoMart/add-item");
-      const data = await res.json();
-      setResources(data.resources);
-      if (data.resources.length === 9) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
-      }
-    };
-    fetchPost();
-  }, []);
-
-  const handleShowMore = async () => {
-    const numberOfPosts = resources.length;
-    const startIndex = numberOfPosts;
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set("startIndex", startIndex);
-    const searchQuery = urlParams.toString();
-    const res = await fetch(
-      `/api/sharedResourcesListing/getSharedResources?${searchQuery}`
-    );
-    if (!res.ok) {
-      return;
+   const handleUploadImage = async () => {
+    try {
+       if(!file) {
+          setImageUploadError('Please select an image');
+          return;
+       }
+       setImageUploadError(null);
+       const storage = getStorage(app)
+       const fileName = new Date().getTime() + "-" + file.name;
+       const storageRef = ref(storage, fileName);
+       const uploadTask = uploadBytesResumable(storageRef, file);
+       uploadTask.on('state_changed',
+          (snapshot) => {
+             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+             setImageUploadProgress(progress.toFixed(0));
+          },
+          (error) => {
+             setImageUploadError('could not upload image (File must be less than 2MB)');
+             setImageUploadProgress(null);
+          },
+          () => {
+             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setImageUploadProgress(null);
+                setImageUploadError(null);
+                setFormData({ ...formData, image: downloadURL });
+             });
+          });
+    } catch (error) {
+       setImageUploadError('Image upload failed')
+       setImageUploadProgress(null);
+       console.log(error);
     }
-    if (res.ok) {
-      const data = await res.json();
-      setResources([...resources, ...data.resources]);
-      if (data.resources.length === 9) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
-      }
-    }
-  };
-  const addToCartHandler = async (id) => {
-    const existingItem = cart && cart.find((i) => i._id === id);
-    if (existingItem) {
-      toast.error("Item already in the cart");
-    } else {
-      const clickedResource = resources.find((resource) => resource._id === id);
-      if (clickedResource.quantity < 1) {
-        toast.error("Sorry! The quantity is not available in stock");
-      } else {
-        const cartData = { ...clickedResource, quantity: 1 };
-        dispatch(addToCart(cartData));
-        toast.success("Item added to cart successfully");
-      }
-    }
-  };
+ }
 
-  const removeFromWishListHandler = (data) => {
-    setClick(!click);
-    dispatch(removeFromWishlist(data._id));
-  };
+ const handleChange = (e) => {
+  let boolean = null;
+  if(e.target.value === "true") {
+     boolean = true;
+  }
+  if(e.target.value === "false") {
+     boolean = false;
+  }
+  if(!e.target.files) {
+     setFormData((prevState) => ({
+        ...prevState, [e.target.id]: boolean ?? e.target.value
+     }))
+  }
+}
 
-  const addToWishListHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
-  };
-
-  /*useEffect(() => {
-    if (
-      resources &&
-      wishlist &&
-      wishlist.find((i) => i._id === resources._id)
-    ) {
-      setClick(true);
-    } else {
-      setClick(false);
-    }
-  }, [wishlist, resources]);*/
-
-  const handleRatingClick = (value) => {
-    if (rating === value) {
-      dispatch(removeFromRating());
-    } else {
-      dispatch(addToRating(value));
-    }
-  };
-
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+     if(+formData.regularPrice < +formData.discountPrice) return setError('Discount price must be lower than regular price')
+     if(!file) {
+        setImageUploadError('Please select an image');
+        return;
+     }
+     const res = await fetch('/api/order/create', {
+        method: 'POST',
+        headers: {
+           'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+     })
+     const data = await res.json();
+     if(!res.ok) {
+        setError(data.message);
+        return;
+     }
+     if(res.ok) {
+        setError(null);
+        // navigate(`/sharedResource/${data.slug}`)
+        // navigate(`/dashboard?tab=properties`)
+        console.log("Success");
+        
+     }
+  } catch (error) {
+     setError('Failed to create shared resource listing');
+     console.log(error);
+  }
+}
   return (
-    <>
-      <ShopitoMartHeader />
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
-       {resources && resources.length > 0 && (
-          <div className="flex flex-col gap-6">
-            {/* <h1 className='text-center my-7 font-extrabold text-3xl underline'>Market Place</h1> */}
-            <div className="flex flex-wrap gap-12">
-              {resources.map((resource) => (
-                <div key={resource._id}>
-                  <div className="group relative w-full border border-teal-500 overflow-hidden rounded-lg sm:w-[330px] transition-all">
-                    <Link to={`/sharedResource/${resource.slug}`}>
-                      <img
-                        src={resource.image}
-                        alt="post cover"
-                        className="h-[230px] w-full object-cover  transition-all duration-300 z-20"
-                      />
-                    </Link>
-                    <div className="p-3 flex flex-col gap-2">
-                      <p className="text-lg font-semibold line-clamp-2">
-                        {resource.title}
-                      </p>
-                      <div className="flex justify-between">
-                        <span className="italic text-sm">
-                          {resource.category}
-                        </span>
-                        <div className="flex text-xs">
-                          {/* {
-                                       [...Array(5)].map((index) => (
-                                          <span key={index}>
-                                             {rating && rating.find((i) => i._id === resource._id) ? (
-                                                <AiFillStar size={20} onClick={() => removeFromRatingHandler(resource)} className='cursor-pointer text-yellow-300' />
-                                             ) : (
-                                                <AiOutlineStar size={20} onClick={() => addToRatingHandler(resource)} className='cursor-pointer text-gray-500' />
-                                             )}
-                                          </span>
-                                       ))
-                                    } */}
-
-                          {[...Array(5)].map((star, i) => (
-                            <span
-                              key={i}
-                              onClick={() => handleRatingClick(i + 1)}
-                            >
-                              {i < rating ? (
-                                <AiFillStar
-                                  size={20}
-                                  className="cursor-pointer text-yellow-300"
-                                />
-                              ) : (
-                                <AiOutlineStar
-                                  size={20}
-                                  className="cursor-pointer text-gray-500"
-                                />
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="flex">
-                          <h5 className="font-bold text-[18px] text-slate-800 dark:text-teal-500 font-Roboto">
-                            {resource.regularPrice === 0
-                              ? resource.regularPrice + " $"
-                              : resource.regularPrice -
-                                resource.discountPrice +
-                                " $"}
-                          </h5>
-                          <h4 className="font-[500] text-[16px] text-[#d55b45] pl-3 mt-[-4px] line-through">
-                            {resource.regularPrice
-                              ? resource.regularPrice + " $"
-                              : null}
-                          </h4>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          {wishlist &&
-                          wishlist.find((item) => item._id === resource._id) ? (
-                            <AiFillHeart
-                              size={22}
-                              onClick={() =>
-                                removeFromWishListHandler(resource)
-                              }
-                              className="cursor-pointer text-red-600"
-                              title="Remove from wishlist"
-                            />
-                          ) : (
-                            <AiOutlineHeart
-                              size={22}
-                              onClick={() => addToWishListHandler(resource)}
-                              className="cursor-pointer"
-                              title="Add to wishlist"
-                            />
-                          )}
-                          <Link to={`/sharedResource/${resource.slug}`}>
-                            <AiOutlineEye size={22} title="Quick view" />
-                          </Link>
-                          <AiOutlineShoppingCart
-                            size={22}
-                            title="Add to cart"
-                            onClick={() => addToCartHandler(resource._id)}
-                            className="cursor-pointer"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+    <div className="p-3 max-w-3xl mx-auto min-h-screen">
+      <h1 className="text-3xl text-center my-7 font-extrabold underline text-blue-950 dark:text-slate-300">Create Orders</h1>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+         <div className="flex flex-col gap-4 sm:flex-row justify-between">
+            <TextInput type="text" onChange={handleChange}  value={formData.title} placeholder="Title" required id="title" className="flex-1"/>
+            <Select className="" onChange={(e) => setFormData({...formData, category: e.target.value})}>
+               <option value="Uncategorized">Select a Category</option>
+               <option value="Refrigerator">Refrigerator</option>
+               <option value="Heaters">Heaters</option>
+               <option value="MicroWave">MicroWave</option>
+               <option value="Speakers">Speakers</option>
+               <option value="Washing Machine">Washing Machine</option>
+               <option value="DiningTable">Dining Table</option>
+               <option value="Credenza">Credenza</option>
+               <option value="ArmChair">Arm Chair</option>
+               <option value="BesideTable">Bedside Table</option>
+               <option value="Dresser">Dresser</option>
+               <option value="Cabinet">Cabinet</option>
+               <option value="WoodenBench">Wooden Bench</option>
+               <option value="ElectricDrill">Electric Drill</option>
+               <option value="Pruning Shares">Pruning Shares</option>
+               <option value="Hedge Shares">Hedge Shares</option>
+               <option value="Mower">Mower</option>
+               <option value="Hedge Trimmer">Hedge Trimmer</option>
+               <option value="Pruning Saw">Pruning Saw</option>
+               <option value="Ladder">Ladder</option>
+            </Select>
+         </div>
+         <TextInput type="text" onChange={handleChange}  value={formData.shop} placeholder="Shop" required id="shop" />
+         <div className="flex  gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
+            <FileInput type='file' accept="image/*" onChange={(e) => setFile(e.target.files[0])} />
+            <Button type="button" gradientDuoTone='purpleToBlue' outline onClick={handleUploadImage} disabled={imageUploadProgress}>
+               {
+                  imageUploadProgress ? (
+                     <div className="w-16 h-16">
+                        <CircularProgressbar value={imageUploadProgress} text={`${imageUploadProgress || 0}%`} />
+                     </div>
+                  ) : (
+                     "Upload Image"
+                  )
+               }
+            </Button>
+         </div>
+            {
+               imageUploadError && (
+                  <Alert className='mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce'>{imageUploadError}</Alert>
+               )
+            }
+            {
+               formData.image && (
+                  <img src={formData.image} alt="Uploaded" className="w-full h-72 object-cover" />
+               )
+            }
+         <div className="flex flex-col gap-4 sm:flex-row justify-between">
+            <TextInput type="number" onChange={handleChange} value={formData.quantity} id="quantity" placeholder="Quantity" min='1' max='100' className="w-[50%]" required />
+            <TextInput type="number" onChange={handleChange} value={formData.condition} id="condition" placeholder="Condition" min='1' max='100' className="w-[50%]" required />
+         </div>
+         <Textarea type="text" onChange={handleChange} value={formData.description} placeholder='Add a Description...' rows='3' maxLength='500' id="description" required />
+         
+         <p className='text-lg font-semibold'>Offer</p>
+         <div className="flex">
+            <button type='button' id='offer'onClick={handleChange} value={true}  className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${!formData.offer ? "bg-white text-black" : "bg-slate-600 text-white"} `}> 
+               {/* ${type === "rent" ? "bg-white text-black" : "bg-slate-600 text-white"} */}
+                  Yes
+            </button>
+            <button type='button' id='offer' onClick={handleChange} value={false} className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${formData.offer ? "bg-white text-black" : "bg-slate-600 text-white"}`}> 
+               {/* ${type === "rent" ? "bg-white text-black" : "bg-slate-600 text-white"} */}
+                  No
+            </button>
+         </div>
+         <div className="flex items-center gap-2">
+            <TextInput type="number" onChange={handleChange} value={formData.regularPrice} id="regularPrice" min='25' max='10000000' className="w-[50%]" required />
+            <div>
+               <p className="font-semibold">Regular Price</p>
+               <span className="text-xs">($ / month)</span>
             </div>
-          </div>
-        )}
-        {showMore && (
-          <button
-            onClick={handleShowMore}
-            className="text-teal-500 hover:underline p-7 text-center w-full"
-          >
-            Show More
-          </button>
-        )}
-      </div>
-    </>
-  );
-};
-export default ShopitoMart;
+         </div>
+         {
+            formData.offer && (
+               <div className="flex items-center gap-2">
+                  <TextInput type="number" onChange={handleChange} value={formData.discountPrice} id="discountPrice" min='0' max='10000000' className="w-[50%]" required />
+                  <div>
+                     <p className="font-semibold">Discount Price</p>
+                     <span className="text-xs">($ / month)</span>
+                  </div>
+               </div>
+            )
+         }
+         <Button type="submit" gradientDuoTone='purpleToBlue' className="uppercase" >Create Order Listing</Button>
+         {
+            error && (
+               <Alert className='mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce'>{error}</Alert>
+            )
+         }
+      </form>
+    </div>
+  )
+}

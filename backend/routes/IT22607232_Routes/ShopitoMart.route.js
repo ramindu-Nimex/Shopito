@@ -4,6 +4,6 @@ import { createItem } from '../../controllers/IT22607232_Controllers/s_OrderCont
 
 const router = express.Router();
 
-router.post('/add',createItem);
+router.post('/create', verifyToken, createItem)
 
 export default router;

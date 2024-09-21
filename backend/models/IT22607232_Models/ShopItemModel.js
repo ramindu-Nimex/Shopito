@@ -1,4 +1,3 @@
-import express from "express";
 import mongoose from "mongoose";
 
 const ShoppingItemsSchema = new mongoose.Schema(
@@ -12,7 +11,6 @@ const ShoppingItemsSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-
     shop: {
       type: String,
       required: true,
@@ -24,18 +22,17 @@ const ShoppingItemsSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flipkart.com%2Fthapnath-women-maxi-black-dress%2Fp%2Fitmdb3360ce76f6a%3Fpid%3DDREGTJCDQMBYJ3GW%26lid%3DLSTDREGTJCDQMBYJ3GWE7QZ4E%26marketplace%3DFLIPKART%26cmpid%3Dcontent_dress_8965229628_gmc&psig=AOvVaw0tiwAkZIVpuCF13lFG7Whc&ust=1725032497594000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKDApIHFmogDFQAAAAAdAAAAABAJ",
+      default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrhUG-tmEtXi0YhOg4K-qx-VQ5_Ei5Ujqdjg&s"
     },
     quantity: {
       type: Number,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
+    condition: {
+      type: Number,
+      required: true
     },
-    type: {
+    description: {
       type: String,
       required: true,
     },
@@ -51,7 +48,11 @@ const ShoppingItemsSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    
+    slug: {
+      type: String,
+      required: true,
+      unique: true
+   },
   },
   { timestamps: true }
 );

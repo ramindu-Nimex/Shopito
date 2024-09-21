@@ -63,7 +63,7 @@ app.use("/api/inventory", inventoryRoutes);
 
 
 //IT22607232 Routes
-app.use("/api/ShopitoMart", ShopitoMartRoutes);
+app.use("/api/order", ShopitoMartRoutes);
 
 
 

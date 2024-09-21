@@ -97,8 +97,7 @@ const handleSubmit = async (e) => {
      if(res.ok) {
         setError(null);
         // navigate(`/sharedResource/${data.slug}`)
-        // navigate(`/dashboard?tab=properties`)
-        console.log("Success");
+        navigate(`/dashboard?tab=order`)
         
      }
   } catch (error) {

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
+import { GrResources } from "react-icons/gr";
 
 export default function DashSidebar() {
   const { currentUser } = useSelector((state) => state.user);
@@ -51,15 +52,15 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
 
-          {currentUser && !currentUser.isAdmin && (
+          {currentUser.isShoppingOrderAdmin && (
             <>
-              <Link to="/dashboard?tab=orderUserDash">
+              <Link to="/dashboard?tab=order">
                 <Sidebar.Item
-                  active={tab === "orderUserDash"}
-                  icon={HiOutlineShoppingBag}
+                  active={tab === "order"}
+                  icon={GrResources}
                   as="div"
                 >
-                  Order Dashboard
+                  Order
                 </Sidebar.Item>
               </Link>
             </>

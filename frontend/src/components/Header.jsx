@@ -92,16 +92,11 @@ const Header = () => {
         <Navbar.Link active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
         </Navbar.Link>
+        <Navbar.Link active={path === "/MarketPlace"} as={"div"}>
+          <Link to="/MarketPlace">MarketPlace</Link>
+        </Navbar.Link>
         <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About Us</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === "/"} as={"div"}>
-          <Link
-            to="/ShopitoMart"
-            className="hover:text-orange-500 active:text-orange-600 hover:underline"
-          >
-            Shopito Mart
-          </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/contact"} as={"div"}>
           <Link to="/contact">Contact Us</Link>

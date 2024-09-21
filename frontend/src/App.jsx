@@ -12,6 +12,7 @@ import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ShopitoMart from "./Pages/IT22607232_Pages/ShopitoMart";
 import ShopitoMartUpdate from "./Pages/IT22607232_Pages/ShopitoMartUpdate";
+import MarketPlace from "./Pages/IT22607232_Pages/MarketPlace";
 
 const App = () => {
   return (
@@ -25,7 +26,7 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-            
+            <Route path="/marketPlace" element={<MarketPlace />} />
             <Route element={<PrivateRoute />} >
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ShopitoMart" element={<ShopitoMart />} />

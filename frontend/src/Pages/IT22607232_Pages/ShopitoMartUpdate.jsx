@@ -214,7 +214,7 @@ const handleSubmit = async (e) => {
                </div>
             )
          }
-         <Button type="submit" gradientDuoTone='purpleToBlue' className="uppercase" >Create Order Listing</Button>
+         <Button type="submit" gradientDuoTone='purpleToBlue' className="uppercase" >Update Order Listing</Button>
          {
             error && (
                <Alert className='mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce'>{error}</Alert>

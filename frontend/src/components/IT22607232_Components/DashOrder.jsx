@@ -118,7 +118,7 @@ export default function DashOrder() {
                           </span>
                         </Table.Cell>
                         <Table.Cell>
-                          <Link className="text-teal-500 hover:underline" to={`/update-sharedResourceListing/${resources._id}`}>
+                          <Link className="text-teal-500 hover:underline" to={`/update-order/${resources._id}`}>
                             <span >Edit</span>
                           </Link>
                         </Table.Cell>

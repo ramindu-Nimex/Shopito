@@ -79,3 +79,27 @@ export const deleteOrders = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateOrder = async (req, res, next) => {
+  if(!req.user.isShoppingOrderAdmin || req.user.id !== req.params.userId) {
+     return next(errorHandler(403, "You are not authorized to update this resource"))
+  }
+  try {
+     const updatedResource = await ShoppingItemsMart.findByIdAndUpdate(req.params.postId, {
+        $set: {
+           title: req.body.title,
+           description: req.body.description,
+           category: req.body.category,
+           quantity: req.body.quantity,
+           image: req.body.image,
+           condition: req.body.condition,
+           regularPrice: req.body.regularPrice,
+           discountPrice: req.body.discountPrice,
+           offer: req.body.offer,
+        },
+     }, { new: true });
+     res.status(200).json(updatedResource);
+  } catch (error) {
+     next(error);
+  }
+}

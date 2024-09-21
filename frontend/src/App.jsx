@@ -11,6 +11,7 @@ import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ShopitoMart from "./Pages/IT22607232_Pages/ShopitoMart";
+import ShopitoMartUpdate from "./Pages/IT22607232_Pages/ShopitoMartUpdate";
 
 const App = () => {
   return (
@@ -28,6 +29,10 @@ const App = () => {
             <Route element={<PrivateRoute />} >
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ShopitoMart" element={<ShopitoMart />} />
+              <Route
+                path="/update-order/:orderId"
+                element={<ShopitoMartUpdate />}
+              />
             </Route>
           </Routes>
         </div>

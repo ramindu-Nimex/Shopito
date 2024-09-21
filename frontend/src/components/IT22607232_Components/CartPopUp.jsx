@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Button } from "flowbite-react";
 import { addToCart, removeFromCart } from "../../redux/IT22607232/cartSlice.js";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default function CartPopUp({ setOpenCart }) {
   const { cart } = useSelector((state) => state.cart);
@@ -23,6 +24,30 @@ export default function CartPopUp({ setOpenCart }) {
 
   const quantityChangeHandler = (data) => {
     dispatch(addToCart(data));
+  };
+
+  // payment integration
+  const makePayment = async () => {
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+    const body = {
+      products: cart,
+    };
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const res = await fetch("/api/checkout/creteCheckout", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    const session = await res.json();
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    if (result.error) {
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -76,7 +101,7 @@ export default function CartPopUp({ setOpenCart }) {
               <Button
                 gradientDuoTone="purpleToBlue"
                 className="w-full"
-                // onClick={makePayment}
+                onClick={makePayment}
               >
                 <h1 className="text-[#fff] text-[18px] font-[600]">
                   Checkout Now (USD${totalPrice})

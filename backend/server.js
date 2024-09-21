@@ -23,6 +23,7 @@ import inventoryRoutes from "./routes/IT22003546_Routes/inventory.route.js";
 
 //IT22607232 Routes
 import ShopitoMartRoutes from "./routes/IT22607232_Routes/ShopitoMart.route.js";
+import checkoutRoutes from "./routes/IT22607232_Routes/checkout.route.js";
 
 
 
@@ -64,6 +65,7 @@ app.use("/api/inventory", inventoryRoutes);
 
 //IT22607232 Routes
 app.use("/api/order", ShopitoMartRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 
 

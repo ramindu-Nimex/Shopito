@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import ChatDashboard from "./components/IT22577160/ChatDashboard";
 import DashboardChatRoom from "./components/IT22577160/DashboardChatRoom";
 import ChatDashboardIntro from "./components/IT22577160/ChatDashboardIntro";
+import ShoppingAssistant from "./components/IT22577160/ShoppingAssistant";
 
 const App = () => {
   return (
@@ -38,6 +39,10 @@ const App = () => {
                   element={<DashboardChatRoom />}
                 />
               </Route>
+                <Route
+                  path="/dashboard/shopAsisstant"
+                  element={<ShoppingAssistant />}
+                />
             </Route>
           </Routes>
         </div>

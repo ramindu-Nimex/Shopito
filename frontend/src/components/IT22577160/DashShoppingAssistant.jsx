@@ -6,6 +6,7 @@ import { FaRobot } from "react-icons/fa6";
 import soundOn from "/soundon.png";
 import soundOff from "/soundoff.png";
 import bot from "/bot.mp3";
+import { FaShoppingBasket } from "react-icons/fa";
 
 export default function Homepage() {
   const [typingStatus, setTypingStatus] = useState("human1");
@@ -42,6 +43,19 @@ export default function Homepage() {
                   ShopIBot
                 </h3>
                 <FaRobot className="bg-teal-600 text-white rounded-full text-5xl p-3 shadow-lg" />
+              </div>
+              <img src="/bot.png" alt="" width={100} />
+            </div>
+          </div>
+        </Link>
+        <Link to="/dashboard/shopAsisstant" className="mt-5">
+          <div className="flex flex-col p-3 dark:bg-slate-800 bg-slate-200 gap-4 md:w-96 rounded-md shadow-md w-full">
+            <div className="flex justify-between">
+              <div className="gap-5">
+                <h3 className="text-gray-500 text-lg uppercase font-bold">
+                  ShopIBot 
+                </h3>
+                <FaShoppingBasket className="bg-teal-600 text-white rounded-full text-5xl p-3 shadow-lg" />
               </div>
               <img src="/bot.png" alt="" width={100} />
             </div>

@@ -142,7 +142,7 @@ const ShopsPage = () => {
                   {shop.shopDescription}
                 </p>
                 <a
-                  href={`/shops/${shop.shopID}`}
+                  href={`/shops/${shop.shopID}`} // Navigates to ShopDetails page
                   className="inline-block mt-4 text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-semibold transition-colors"
                 >
                   View Details →

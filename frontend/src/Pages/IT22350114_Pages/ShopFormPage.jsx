@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Label, TextInput, Textarea, Alert } from "flowbite-react";
+import { app } from "../../firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
-const generateServiceId = () => `SHP-${Math.floor(1000 + Math.random() * 9000)}`;
+const generateServiceId = () =>
+  `SHP-${Math.floor(1000 + Math.random() * 9000)}`;
 const ShopCreate = () => {
+  const { shopId } = useParams(); // Get the shop ID from the URL
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     shopID: generateServiceId(),
@@ -40,6 +49,27 @@ const ShopCreate = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch existing shop details if we are editing
+  useEffect(() => {
+    if (shopId) {
+      const fetchShopDetails = async () => {
+        try {
+          const res = await fetch(`/api/shopListings/read/${shopId}`);
+          const data = await res.json();
+          if (res.ok) {
+            setFormData(data);
+          } else {
+            setError("Failed to fetch shop details");
+          }
+        } catch (err) {
+          setError("Failed to fetch shop details");
+        }
+      };
+
+      fetchShopDetails();
+    }
+  }, [shopId]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -56,33 +86,31 @@ const ShopCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      if (!shopName || !shopLocation || !shopDescription || !shopCategory) {
-        return setError("Please fill in all fields.");
-      }
+      const method = shopId ? "PUT" : "POST"; // PUT for edit, POST for new
+      const url = shopId
+        ? `/api/shopListings/update/${shopId}`
+        : `/api/shopListings/create`;
 
-      setLoading(true);
-      setError(false);
-
-      const res = await fetch("/api/shopListings/create", {
-        method: "POST",
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
+        body: JSON.stringify(formData),
       });
+
       const data = await res.json();
-      setLoading(false);
-      if (data.success === false) {
+      if (res.ok) {
+        navigate("/dashboard?tab=shop-list"); // Redirect after success
+      } else {
         setError(data.message);
       }
-      navigate("/dashboard?tab=shop-list");
     } catch (error) {
-      setError(error.message);
+      setError("Failed to update shop details");
+    } finally {
       setLoading(false);
     }
   };

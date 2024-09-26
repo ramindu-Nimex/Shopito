@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Textarea, Alert } from "flowbite-react";
 
+const generateServiceId = () => `SHP-${Math.floor(1000 + Math.random() * 9000)}`;
 const ShopCreate = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
-    shopID: "",
+    shopID: generateServiceId(),
     shopName: "",
     shopLocation: "",
     shopDescription: "",
@@ -155,7 +156,7 @@ const ShopCreate = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
           <div>
-            <Label htmlFor="shopID">Amenity ID</Label>
+            <Label htmlFor="shopID">Shop ID</Label>
             <TextInput
               type="text"
               name="shopID"

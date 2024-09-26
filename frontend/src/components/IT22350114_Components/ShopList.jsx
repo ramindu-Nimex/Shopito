@@ -67,7 +67,7 @@ const ShopList = () => {
   return (
     <div className="w-full table-auto">
       <h1 className="text-center mt-7 font-extrabold text-3xl underline">
-        Service Listing
+        Shop Listing
       </h1> 
       {currentUser?.isAdmin && (
         <div className="w-full overflow-x-hidden">
@@ -75,6 +75,7 @@ const ShopList = () => {
         <div className="overflow-x-auto">
           <Table hoverable className="min-w-full bg-white shadow-md rounded-lg">
             <Table.Head className="bg-gray-50">
+            <Table.HeadCell className="px-4 py-2 text-left">Shop ID</Table.HeadCell>
               <Table.HeadCell className="px-4 py-2 text-left">Shop Name</Table.HeadCell>
               <Table.HeadCell className="px-4 py-2 text-left">Location</Table.HeadCell>
               <Table.HeadCell className="px-4 py-2 text-left">Description</Table.HeadCell>
@@ -91,6 +92,7 @@ const ShopList = () => {
               shopListing.map((shop) => (
                 <Table.Body key={shop._id} className="divide-y">
                   <Table.Row className="hover:bg-gray-50">
+                  <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopID}</Table.Cell>
                     <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopName}</Table.Cell>
                     <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopLocation}</Table.Cell>
                     <Table.Cell className="px-4 py-2 whitespace-nowrap">{shop.shopDescription}</Table.Cell>

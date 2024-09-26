@@ -11,6 +11,7 @@ import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
+import ShopList from "./components/IT22350114_Components/ShopUserView_02";
 import Inventory from "./components/IT22003546_Components/InventoryUserView_01";
 
 const App = () => {
@@ -29,7 +30,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
             <Route path="/inventory-create" element={<ProductForm />} />
-            <Route path="/inventory-User:inventoryID" element={<Inventory />} />
+            <Route path="/shop-User:shopID" element={<ShopList />} />
+            <Route path="/shops/:shopID" element={<Inventory />} />
           </Routes>
         </div>
         <FooterComponent />

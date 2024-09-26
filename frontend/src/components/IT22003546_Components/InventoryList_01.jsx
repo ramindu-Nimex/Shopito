@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Button, Table} from "flowbite-react";
+import { Button, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 const InventoryList_01 = () => {
@@ -39,31 +39,22 @@ const InventoryList_01 = () => {
                     "Content-Type": "application/json",
                 },
             });
-    
-            // Check for HTTP error responses
+
             if (!res.ok) {
                 throw new Error(`HTTP error! Status: ${res.status}`);
             }
-    
+
             const data = await res.json();
-    
-            // Log the response data for debugging
             console.log("Response data:", data);
-    
-            // Check if the response indicates success
-            // Modify this condition based on your API's actual response format
             if (data.message === "Inventory deleted successfully") {
                 setShowInventory((prev) => prev.filter((inventory) => inventory._id !== id));
             } else {
                 console.error("Deletion failed:", data.message || "Unknown error");
             }
         } catch (error) {
-            // Log the error for debugging
             console.error("Error deleting inventory:", error);
         }
     };
-    
-    
 
     const handleStatusChange = async (id, newStatus) => {
         try {
@@ -106,7 +97,7 @@ const InventoryList_01 = () => {
                         <Table.HeadCell>Variations</Table.HeadCell>
                         <Table.HeadCell>Status</Table.HeadCell>
                         <Table.HeadCell>Images</Table.HeadCell>
-                        <Table.HeadCell>Actions</Table.HeadCell>
+                        {/* <Table.HeadCell>Actions</Table.HeadCell> */}
                     </Table.Head>
                     <Table.Body>
                         {showInventory && showInventory.length > 0 ? (
@@ -158,14 +149,7 @@ const InventoryList_01 = () => {
                                             <span>No Images</span>
                                         )}
                                     </Table.Cell>
-
-
                                     <Table.Cell>
-                                        {/* <Button
-                                            onClick={() => handleStatusChange(inventory._id, inventory.productStatus === "Available" ? "Out of Stock" : "Available")}
-                                        >
-                                            {inventory.productStatus === "Available" ? "Set Out of Stock" : "Set Available"}
-                                        </Button> */}
                                         <Button
                                             onClick={() => handleInventoryDelete(inventory._id)}
                                             color="failure"
@@ -173,7 +157,14 @@ const InventoryList_01 = () => {
                                             Delete
                                         </Button>
                                     </Table.Cell>
-                                    
+                                    <Table.Cell>
+                                        <Link to={`/inventory-update/${inventory._id}`}>
+                                            <Button>
+                                                Update
+                                            </Button>
+                                        </Link>
+                                    </Table.Cell>
+
                                 </Table.Row>
                             ))
                         ) : (
@@ -184,13 +175,11 @@ const InventoryList_01 = () => {
                     </Table.Body>
                 </Table>
             )}
-                <div className="flex gap-2 item-center">
-                    <Button>
-                        <Link to="/inventory-create">Add Inventory</Link>
-                    </Button>
-                </div>    
-
-            
+            <div className="flex gap-2 item-center">
+                <Button>
+                    <Link to="/inventory-create">Add Inventory</Link>
+                </Button>
+            </div>
         </div>
     );
 }

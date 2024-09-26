@@ -1,5 +1,5 @@
 import express from 'express';
-import { createInventory, getInventory, getSingleInventory, updateInventory, deleteInventory } from '../../controllers/IT22003546_Controllers/inventory.controller.js';
+import { createInventory, getInventoryByShopID, getInventory, getSingleInventory, updateInventory, deleteInventory } from '../../controllers/IT22003546_Controllers/inventory.controller.js';
 import { verifyToken } from '../../utils/verifyToken.js';
 
 const router = express.Router();
@@ -12,6 +12,9 @@ router.use((err, req, res, next) => {
 
 // Create new Inventory
 router.post('/create', verifyToken, createInventory);
+
+// Get shop inventory
+router.get('/get/:shopid', verifyToken, getInventoryByShopID)
 
 // Get all Inventory
 router.get('/get', verifyToken, getInventory);

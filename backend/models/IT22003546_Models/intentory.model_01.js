@@ -3,9 +3,8 @@ import mongoose from 'mongoose';
 const InventorySchema = new mongoose.Schema({
     shopID: 
     { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Shop', 
-        required: false },
+        type: String, 
+        required: true },
     
     productID: 
     { 

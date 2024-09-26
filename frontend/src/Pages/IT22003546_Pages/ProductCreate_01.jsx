@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
@@ -18,6 +18,7 @@ const ProductForm = () => {
     const [files, setFiles] = useState([]);
     const { currentUser } = useSelector((state) => state.user);
     const [formData, setFormData] = useState({
+        shopID: '',
         productID: '',
         productName: '',
         productCategory: '',
@@ -36,6 +37,15 @@ const ProductForm = () => {
     const navigate = useNavigate();
     const [attributes, setAttributes] = useState([]);
     const [variations, setVariations] = useState([]);
+
+    useEffect(() => {
+        if (currentUser && currentUser.username) {
+            setFormData((prev) => ({
+                ...prev,
+                shopID: currentUser.username,
+            }));
+        }
+    }, [currentUser]);
 
 
     const handleAddAttribute = () => {
@@ -90,26 +100,24 @@ const ProductForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if(formData.imageURLs.length < 1) return setError('You must upload at least one image')
+            if (formData.imageURLs.length < 1) return setError('You must upload at least one image');
             if (formData.productID === currentUser.productID) return setError('AmenityID already exists');
             setLoading(true);
             setError(false);
 
-            console.log(formData.productID, currentUser.productID);
-
             const payload = {
                 ...formData,
                 userRef: currentUser._id,
-              };
-        
-              console.log("Submitting the following data to the backend:", payload);
-        
-              const response = await fetch('/api/inventory/create', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(payload)
+            };
+
+            console.log("Submitting the following data to the backend:", payload);
+
+            const response = await fetch('/api/inventory/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -118,8 +126,7 @@ const ProductForm = () => {
                 return setError(data.message);
             }
             navigate('/dashboard?tab=inventory');
-        }
-        catch (err) {
+        } catch (err) {
             setError(err.message);
             setLoading(false);
         }
@@ -189,6 +196,16 @@ const ProductForm = () => {
             <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Create Product</h1>
             <div className="flex p-3 w-[40%] mx-auto flex-col md:flex-row md:items-center gap-20 md:gap-20 mt-10">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full justify-center">
+                    <div>
+                        <Label htmlFor="shopID">Shop ID</Label>
+                        <TextInput
+                            type="text"
+                            name="shopID"
+                            value={formData.shopID}
+                            readOnly // Optional: make read-only if you want to prevent changes
+                            required
+                        />
+                    </div>
                     <div>
                         <Label htmlFor="productID">Product ID</Label>
                         <TextInput

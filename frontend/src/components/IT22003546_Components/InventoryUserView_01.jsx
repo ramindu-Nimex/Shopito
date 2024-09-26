@@ -1,19 +1,27 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Button, Card } from "flowbite-react";
 
 const Inventory = () => {
+    const { shopID } = useParams(); // Get shopID from URL params
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch products from the backend
         const fetchProducts = async () => {
+            if (!shopID) {
+                setError("Shop ID is required");
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await fetch("/api/inventory/get"); // Adjust the API endpoint
+                const response = await fetch(`/api/inventory/get/${shopID}`); // Fetch products for the specific shopID
                 const data = await response.json();
+                console.log("Received shopID:", shopID);
                 if (response.ok) {
-                    setProducts(data); // Assuming the response is an array of products
+                    setProducts(data);
                 } else {
                     setError("Failed to fetch products");
                 }
@@ -25,7 +33,7 @@ const Inventory = () => {
         };
 
         fetchProducts();
-    }, []); // Empty dependency array ensures this only runs once on component mount
+    }, [shopID]);
 
     if (loading) return <p>Loading products...</p>;
     if (error) return <p className="text-red-500">{error}</p>;
@@ -44,8 +52,24 @@ const Inventory = () => {
                             />
                             <h3 className="text-lg font-semibold">{product.productName}</h3>
                             <p className="text-sm text-gray-600 mb-2">{product.productDescription}</p>
-                            <p className="text-sm text-gray-500">Category: {product.productCategory}</p>
                             <p className="text-sm text-green-600">Status: {product.productStatus}</p>
+
+                            {/* Display variations */}
+                            <div className="mt-4">
+                                <h4 className="font-semibold">Variations:</h4>
+                                {product.variations && product.variations.length > 0 ? (
+                                    product.variations.map((variation, index) => (
+                                        <div key={index} className="border p-2 my-2 rounded-md">
+                                            <p className="text-sm">Variant: {variation.variantName}</p>
+                                            <p className="text-sm">Quantity: {variation.quantity}</p>
+                                            <p className="text-sm">Price: ${variation.price}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No variations available</p>
+                                )}
+                            </div>
+
                             <div className="flex space-x-2 mt-4">
                                 <Button color="success">View</Button>
                                 <Button color="dark">Add to Cart</Button>

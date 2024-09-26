@@ -4,7 +4,7 @@ const shopListingSchema = new mongoose.Schema(
   {
     shopID: {
       type: String,
-      required: true
+      required: true,
     },
     shopName: {
       type: String,
@@ -24,28 +24,28 @@ const shopListingSchema = new mongoose.Schema(
     },
     shopPhone: {
       type: String,
-      required: false
+      required: false,
     },
     shopEmail: {
       type: String,
-      required: false
+      required: false,
     },
     shopWebsite: {
       type: String,
-      required: false
+      required: false,
     },
     shopOpeningHours: {
       type: String,
-      required: false
+      required: false,
     },
     isOpen: {
       type: Boolean,
       default: true,
-      required: false
+      required: false,
     },
-    imageUrls: {
+    imageURLs: {
       type: Array,
-      required: true
+      required: true,
     },
   },
   { timestamps: true }

@@ -36,13 +36,15 @@ export const getAllShopListings = async (req, res, next) => {
 export const getShopListing = async (req, res, next) => {
   try {
     const { shopId } = req.params;
-    const shopListing = await ShopListing.findById(shopId);
+    // Use findOne instead of findById, querying by your custom shopID field
+    const shopListing = await ShopListing.findOne({ shopID: shopId });
+    
     if (!shopListing) {
       return res.status(404).json({ message: "Shop listing not found" });
     }
     return res.status(200).json(shopListing);
   } catch (error) {
-    next(error);
+    next(error);  // This will pass any errors to your error handler middleware
   }
 };
 

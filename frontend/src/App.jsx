@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import ShopCreate from "./Pages/IT22350114_Pages/ShopFormPage.jsx";
 import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
+import ShopsPage from "./components/IT22350114_Components/ShopsPage.jsx";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/create-shop" element={<ShopCreate />} />
             <Route path="/shop-list" element={<ShopListPage />} />
             <Route path="/edit-shop/:shopId" element={<ShopCreate />} />
+            <Route path="/shops" element={<ShopsPage />} />
 
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />

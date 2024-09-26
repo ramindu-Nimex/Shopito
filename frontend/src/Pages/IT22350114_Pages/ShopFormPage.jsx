@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Label, TextInput, Textarea, Alert } from "flowbite-react";
+import { Button, FileInput, Label, TextInput, Textarea, Alert } from "flowbite-react";
 import { app } from "../../firebase";
 import {
   getStorage,
@@ -26,7 +26,7 @@ const ShopCreate = () => {
     shopWebsite: "",
     shopOpeningHours: "",
     isOpen: true,
-    //imageURls: [],
+    imageURLs: [],
   });
   const {
     shopID,
@@ -39,7 +39,7 @@ const ShopCreate = () => {
     shopWebsite,
     shopOpeningHours,
     isOpen,
-    imageURls,
+    imageURLs,
   } = formData;
 
   const [files, setFiles] = useState([]);
@@ -89,6 +89,11 @@ const ShopCreate = () => {
     setLoading(true);
 
     try {
+      if (formData.imageURLs.length < 1)
+        return setError("You must upload at least one image");
+
+      console.log("Submitting image URLs:", formData.imageURLs);
+
       const method = shopId ? "PUT" : "POST"; // PUT for edit, POST for new
       const url = shopId
         ? `/api/shopListings/update/${shopId}`
@@ -114,7 +119,6 @@ const ShopCreate = () => {
       setLoading(false);
     }
   };
-
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
       setUploading(true);
@@ -127,6 +131,7 @@ const ShopCreate = () => {
 
       Promise.all(promises)
         .then((urls) => {
+          console.log('Uploaded image URLs:', urls);  // Log URLs to check if they are correct
           setFormData({
             ...formData,
             imageURLs: formData.imageURLs.concat(urls),
@@ -162,6 +167,7 @@ const ShopCreate = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('Download URL:', downloadURL);  // Log URL to verify if it is correct
             resolve(downloadURL);
           });
         }
@@ -224,15 +230,25 @@ const ShopCreate = () => {
             />
           </div>
           <div>
-            <Label htmlFor="shopCategory">Shop Category:</Label>
-            <TextInput
-              type="text"
-              name="shopCategory"
-              value={formData.shopCategory}
-              onChange={handleChange}
-              required
-            />
-          </div>
+  <Label htmlFor="shopCategory">Shop Category:</Label>
+  <select
+    id="shopCategory" // Add an id to the select element to match htmlFor in Label
+    name="shopCategory"
+    value={formData.shopCategory}
+    onChange={handleChange} // Ensure the handleChange is properly managing the state
+    required
+    className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-300"
+  >
+    <option value="" disabled>Select a category</option>
+    <option value="Clothing">Clothing</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Groceries">Groceries</option>
+    <option value="Home Decor">Home Decor</option>
+    <option value="Books">Books</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
           <div>
             <Label htmlFor="shopPhone">Shop Phone:</Label>
             <TextInput
@@ -279,18 +295,16 @@ const ShopCreate = () => {
             />
           </div>
 
-          {/* 
-          <div className="flex flex-col gap-4 flex-1">
+          <div>
             <p className="font-semibold">
-              Imagex:{" "}
+              Images:{" "}
               <span className="font-normal text-gray-600 ml-2">
-                2 Images Max
+                6 Photos Max
               </span>
             </p>
-
             <div className="flex gap-4">
               <FileInput
-                onChange={(e) => setFiles(e.target.files)}
+                onChange={(e) => setFiles(Array.from(e.target.files))}
                 type="file"
                 id="image"
                 accept="image/*"
@@ -306,32 +320,28 @@ const ShopCreate = () => {
                 {uploading ? "Uploading..." : "Upload"}
               </button>
             </div>
-            <p className="text-red-700">
-              {imageUploadError && imageUploadError}
-            </p>
-            {formData.imageUrls.length > 0 &&
-              formData.imageUrls.map((url, index) => (
-                <div
-                  key={`image-${index}`}
-                  className="flex justify-between p-3 border items-center"
-                >
-                  <img
-                    src={url}
-                    alt={`listing image ${index}`}
-                    className="w-20 h-20 object-contain rounded-lg"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    gradientDuoTone="pinkToOrange"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              ))}
           </div>
-
-    */}
+          <p className="text-red-700">{imageUploadError && imageUploadError}</p>
+          {formData.imageURLs.length > 0 &&
+            formData.imageURLs.map((url, index) => (
+              <div
+                key={`image-${index}`}
+                className="flex justify-between p-3 border items-center"
+              >
+                <img
+                  src={url}
+                  alt={`listing image ${index}`}
+                  className="w-20 h-20 object-contain rounded-lg"
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  gradientDuoTone="pinkToOrange"
+                >
+                  Delete
+                </Button>
+              </div>
+            ))}
           <Button
             type="submit"
             gradientDuoTone="purpleToBlue"

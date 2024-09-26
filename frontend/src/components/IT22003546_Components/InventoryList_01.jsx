@@ -105,6 +105,7 @@ const InventoryList_01 = () => {
                         <Table.HeadCell>Attributes</Table.HeadCell>
                         <Table.HeadCell>Variations</Table.HeadCell>
                         <Table.HeadCell>Status</Table.HeadCell>
+                        <Table.HeadCell>Images</Table.HeadCell>
                         <Table.HeadCell>Actions</Table.HeadCell>
                     </Table.Head>
                     <Table.Body>
@@ -138,6 +139,28 @@ const InventoryList_01 = () => {
                                     </Table.Cell>
                                     <Table.Cell>{inventory.productStatus}</Table.Cell>
                                     <Table.Cell>
+                                        {inventory.imageURLs && inventory.imageURLs.length > 0 ? (
+                                            inventory.imageURLs.map((url, index) => (
+                                                <a 
+                                                    key={index} 
+                                                    href={url} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <img 
+                                                        src={url} 
+                                                        alt={`Inventory Image ${index + 1}`} 
+                                                        style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '5px' }}
+                                                    />
+                                                </a>
+                                            ))
+                                        ) : (
+                                            <span>No Images</span>
+                                        )}
+                                    </Table.Cell>
+
+
+                                    <Table.Cell>
                                         {/* <Button
                                             onClick={() => handleStatusChange(inventory._id, inventory.productStatus === "Available" ? "Out of Stock" : "Available")}
                                         >
@@ -150,6 +173,7 @@ const InventoryList_01 = () => {
                                             Delete
                                         </Button>
                                     </Table.Cell>
+                                    
                                 </Table.Row>
                             ))
                         ) : (

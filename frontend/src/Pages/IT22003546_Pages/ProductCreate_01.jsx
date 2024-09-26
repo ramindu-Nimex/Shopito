@@ -22,7 +22,7 @@ const ProductForm = () => {
         productName: '',
         productCategory: '',
         productDescription: '',
-        attributes: [], // Initialize as an empty array
+        attributes: [], 
         variations: [],
         productStatus: 'Availble',
         imageURLs: [],
@@ -186,7 +186,7 @@ const ProductForm = () => {
 
     return (
         <div className="min-h-screen mt-20">
-            <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Create Amenity</h1>
+            <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Create Product</h1>
             <div className="flex p-3 w-[40%] mx-auto flex-col md:flex-row md:items-center gap-20 md:gap-20 mt-10">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full justify-center">
                     <div>
@@ -275,7 +275,7 @@ const ProductForm = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No attributes added yet.</p> // Optional: A message when there are no attributes
+                            <p>No attributes added yet.</p> 
                         )}
                         <Button
                             type="button"
@@ -335,20 +335,22 @@ const ProductForm = () => {
                                         }}
                                         className="p-2 border rounded w-full"
                                     />
-                                    <TextInput
-                                        type="text"
-                                        placeholder="Image URL"
-                                        value={(variation.images && variation.images[0]) || ""}
-                                        onChange={(e) => {
-                                            const newVariations = [...formData.variations];
-                                            newVariations[index] = {
-                                                ...newVariations[index],
-                                                images: [e.target.value] // Ensure images is an array
-                                            };
-                                            setFormData(prev => ({ ...prev, variations: newVariations }));
-                                        }}
-                                        className="p-2 border rounded w-full"
-                                    />
+                                    <div className="flex flex-col gap-4 flex-1">
+                                        <p className="font-semibold">Images: <span className="font-normal text-gray-600 ml-2">6 Photos Max</span></p>
+                                        <div className="flex gap-4">
+                                            <FileInput onChange={(e) => setFiles(e.target.files)} type='file' id="image" accept="image/*" multiple className="w-full" />
+                                            <button onClick={handleImageSubmit} type="button" disabled={uploading} className="p-1 text-red-700 border border-red-700 rounded uppercase hover:shadow-lg disabled:opacity-80">{uploading ? 'Uploading...' : 'Upload'}</button>
+                                        </div>
+                                        <p className="text-red-700">{imageUploadError && imageUploadError}</p>
+                                        {
+                                            formData.imageURLs.length > 0 && formData.imageURLs.map((url, index) => (
+                                                <div key={`image-${index}`} className="flex justify-between p-3 border items-center">
+                                                    <img src={url} alt={`listing image ${index}`} className='w-20 h-20 object-contain rounded-lg' />
+                                                    <Button type="button" onClick={() => handleRemoveImage(index)} gradientDuoTone="pinkToOrange">Delete</Button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
                                     <Button
                                         type="button"
                                         onClick={() => handleRemoveVariation(index)}
@@ -359,7 +361,7 @@ const ProductForm = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No variations added yet.</p> // Optional: A message when there are no variations
+                            <p>No variations added yet.</p> 
                         )}
                         <Button
                             type="button"
@@ -387,12 +389,12 @@ const ProductForm = () => {
                     
 
                     <div className="flex flex-col gap-4 flex-1">
-                        <p className="font-semibold">Images: <span className="font-normal text-gray-600 ml-2">6 Photos Max</span></p>
+                        {/* <p className="font-semibold">Images: <span className="font-normal text-gray-600 ml-2">6 Photos Max</span></p>
                         <div className="flex gap-4">
                             <FileInput onChange={(e) => setFiles(e.target.files)} type='file' id="image" accept="image/*" multiple className="w-full" />
                             <button onClick={handleImageSubmit} type="button" disabled={uploading} className="p-1 text-red-700 border border-red-700 rounded uppercase hover:shadow-lg disabled:opacity-80">{uploading ? 'Uploading...' : 'Upload'}</button>
                         </div>
-                        <p className="text-red-700">{imageUploadError && imageUploadError}</p>
+                        <p className="text-red-700">{imageUploadError && imageUploadError}</p> */}
                         {
                             formData.imageURLs.length > 0 && formData.imageURLs.map((url, index) => (
                                 <div key={`image-${index}`} className="flex justify-between p-3 border items-center">
@@ -405,7 +407,7 @@ const ProductForm = () => {
                         type="submit"
                         //gradientDuoTone="purpleToBlue"
                         className="uppercase"
-                    >{loading ? "Creating Amenity..." : "Create Amenity"}</Button>
+                    >{loading ? "Creating Product..." : "Create Product"}</Button>
                         {error && <Alert className='mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce'>{error}</Alert>}
                     </div>
                 </form>

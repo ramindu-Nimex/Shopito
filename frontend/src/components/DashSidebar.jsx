@@ -68,7 +68,6 @@ export default function DashSidebar() {
   </>
 )}
 
-/* Link to the Shop List page */
 <Link to="/dashboard?tab=shop-list">
   <Sidebar.Item
     active={tab === "shop-list"}
@@ -79,7 +78,6 @@ export default function DashSidebar() {
   </Sidebar.Item>
 </Link>
 
-/* Link to the Shop Create page 
 <Link to="/dashboard?tab=create-shop">
   <Sidebar.Item
     active={tab === "create-shop"}
@@ -89,7 +87,6 @@ export default function DashSidebar() {
     Create Shop
   </Sidebar.Item>
 </Link>
-*/
 
       
           <Sidebar.Item

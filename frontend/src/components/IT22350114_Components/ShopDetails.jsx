@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Button, Card } from "flowbite-react";
 
 const ShopDetails = () => {
   const { shopID } = useParams(); // Get the shop ID from the URL
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [products, setProducts] = useState([]); // State for products
 
   useEffect(() => {
     const fetchShopDetails = async () => {
@@ -22,7 +24,23 @@ const ShopDetails = () => {
         setLoading(false); // Ensure loading state is stopped
       }
     };
+
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`/api/inventory/get/${shopID}`); // Adjust the API endpoint to fetch products for the specific shop
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const productData = await response.json();
+        setProducts(productData); // Set the products data
+      } catch (error) {
+        console.error(error);
+        setError(true); // Handle error if API call fails
+      }
+    };
+
     fetchShopDetails();
+    fetchProducts(); // Fetch products when the component mounts
   }, [shopID]);
 
   if (loading) {
@@ -45,42 +63,12 @@ const ShopDetails = () => {
   const images =
     shop.imageURLs && shop.imageURLs.length > 0 ? shop.imageURLs : [];
 
-  // Dummy product data
-  const dummyProducts = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: "$49.99",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: "$69.99",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: "$89.99",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      price: "$99.99",
-      image: "https://via.placeholder.com/150",
-    },
-  ];
-
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6">
       {/* Cart Button */}
       <div className="flex justify-end fixed top-30 right-10 z-50">
         <button className="relative p-3 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-full hover:from-teal-400 hover:to-blue-500 focus:outline-none shadow-md shadow-gray-400 hover:shadow-lg hover:shadow-gray-500 transform hover:scale-105 transition-all duration-300">
-          <i className="fas fa-cart-shopping text-2xl"></i>{" "}
-          {/* Modern Cart icon */}
-          {/* Badge showing the number of items in cart */}
+          <i className="fas fa-cart-shopping text-2xl"></i>
           <span className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
             3
           </span>
@@ -163,34 +151,47 @@ const ShopDetails = () => {
           </div>
         </div>
 
-        {/* Dummy Product Tiles */}
-        <div className="mt-8">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
-            Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {dummyProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg"
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {product.name}
-                </h3>
-                <p className="text-teal-600 dark:text-teal-400 font-bold">
-                  {product.price}
-                </p>
-                <button className="mt-3 w-full bg-teal-500 text-white p-2 rounded-lg hover:bg-teal-600 transition duration-300">
-                  Add to Cart
-                </button>
-              </div>
-            ))}
-          </div>
+        {/* Render Products */}
+        <div className="p-4">
+            <h1 className="text-2xl font-semibold mb-6">Available Products</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {products.length > 0 ? (
+                    products.map((product) => (
+                        <Card key={product.productID} className="flex flex-col items-center justify-center p-4">
+                            <img
+                                src={product.imageURLs.length > 0 ? product.imageURLs[0] : "placeholder.jpg"}
+                                alt={product.productName}
+                                className="w-40 h-40 object-cover mb-4 rounded-lg"
+                            />
+                            <h3 className="text-lg font-semibold">{product.productName}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{product.productDescription}</p>
+                            <p className="text-sm text-green-600">Status: {product.productStatus}</p>
+
+                            {/* Display variations */}
+                            <div className="mt-4">
+                                <h4 className="font-semibold">Variations:</h4>
+                                {product.variations && product.variations.length > 0 ? (
+                                    product.variations.map((variation, index) => (
+                                        <div key={index} className="border p-2 my-2 rounded-md">
+                                            <p className="text-sm">Variant: {variation.variantName}</p>
+                                            <p className="text-sm">Quantity: {variation.quantity}</p>
+                                            <p className="text-sm">Price: ${variation.price}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No variations available</p>
+                                )}
+                            </div>
+
+                            <div className="flex justify-center space-x-2 mt-4 w-full">
+                              <Button color="dark">Add to Cart</Button>
+                          </div>
+                        </Card>
+                    ))
+                ) : (
+                    <p>No products available</p>
+                )}
+            </div>
         </div>
       </div>
     </div>

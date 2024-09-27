@@ -10,6 +10,7 @@ import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
+
 import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
 import ShopList from "./components/IT22350114_Components/ShopUserView_02";
 import Inventory from "./components/IT22003546_Components/InventoryUserView_01";
@@ -20,6 +21,11 @@ import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
 import ShopsPage from "./components/IT22350114_Components/ShopsPage.jsx";
 import ShopDetails from "./components/IT22350114_Components/ShopDetails.jsx";
 import InventoryList_01 from "./components/IT22003546_Components/InventoryList_01.jsx";
+
+import ShopitoMart from "./Pages/IT22607232_Pages/ShopitoMart";
+import ShopitoMartUpdate from "./Pages/IT22607232_Pages/ShopitoMartUpdate";
+import MarketPlace from "./Pages/IT22607232_Pages/MarketPlace";
+
 
 const App = () => {
   return (
@@ -33,6 +39,8 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
+
+            <Route path="/marketPlace" element={<MarketPlace />} />
             <Route path="/create-shop" element={<ShopCreate />} />
             <Route path="/shop-list" element={<ShopListPage />} />
             <Route path="/edit-shop/:shopId" element={<ShopCreate />} />
@@ -40,7 +48,13 @@ const App = () => {
             <Route path="/shops/:shopID" element={<ShopDetails />} /> {/* Add this */}
 
             <Route element={<PrivateRoute />}>
+
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/ShopitoMart" element={<ShopitoMart />} />
+              <Route
+                path="/update-order/:orderId"
+                element={<ShopitoMartUpdate />}
+              />
             </Route>
             <Route path="/inventory-create/:shopID" element={<ProductForm />} />
             <Route path="/shop-User:shopID" element={<ShopList />} />

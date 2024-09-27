@@ -13,13 +13,14 @@
     "@emailjs/browser": "^4.4.1",
     "@google/generative-ai": "^0.17.1",
     "@reduxjs/toolkit": "^2.2.5",
-    "@tanstack/react-query": "^5.55.4",
-    "imagekitio-react": "^4.2.0",
     "@stripe/stripe-js": "^4.5.0",
+    "@tanstack/react-query": "^5.56.2",
     "firebase": "^10.13.0",
     "flowbite-react": "^0.9.0",
+    "imagekitio-react": "^4.2.0",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.3",
+    "merge2": "^1.4.1",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
@@ -33,7 +34,7 @@
     "react-type-animation": "^3.2.0",
     "redux-persist": "^6.0.0",
     "swiper": "^11.1.4",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-scrollbar": "^3.1.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

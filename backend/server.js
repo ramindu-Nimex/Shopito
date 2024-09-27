@@ -12,8 +12,7 @@ import inventoryRoutes from "./routes/IT22003546_Routes/inventory.route.js";
 
 
 //
-
-
+import shopListingRoutes from "./routes/IT22350114_Routes/shopListingRoute_02.js";
 
 
 //
@@ -51,8 +50,7 @@ app.use("/api/inventory", inventoryRoutes);
 
 
 // IT22350114 Routes
-
-
+app.use('/api/shopListings', shopListingRoutes);
 
 
 

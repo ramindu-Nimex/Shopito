@@ -20,7 +20,7 @@ router.get('/get/:shopid', verifyToken, getInventoryByShopID)
 router.get('/get', verifyToken, getInventory);
 
 // Get single Inventory
-router.get('/get/:Inventoryid', verifyToken, getSingleInventory);
+router.get('/fetch/:Inventoryid', getSingleInventory);
 
 // Update Inventory
 router.put('/update/:Inventoryid', verifyToken, updateInventory);

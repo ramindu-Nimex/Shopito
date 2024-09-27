@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
 import ShopList from "./components/IT22350114_Components/ShopUserView_02";
 import Inventory from "./components/IT22003546_Components/InventoryUserView_01";
+import ProductUpdate from "./Pages/IT22003546_Pages/ProductUpdate_01";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/inventory-create" element={<ProductForm />} />
             <Route path="/shop-User:shopID" element={<ShopList />} />
             <Route path="/shops/:shopID" element={<Inventory />} />
+            <Route path="/inventory-update/:Inventoryid" element={<ProductUpdate />} />
           </Routes>
         </div>
         <FooterComponent />

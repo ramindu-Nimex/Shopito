@@ -1,6 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiOutlineClipboardList, HiOutlinePlusCircle } from "react-icons/hi"; 
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
@@ -50,6 +51,33 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
+
+
+          {/* Link to the Shop List page */}
+          <Link to="/dashboard?tab=shop-list">
+            <Sidebar.Item
+              active={tab === "shop-list"}
+              icon={HiOutlineClipboardList}
+              as="div"
+            >
+              Shop List
+            </Sidebar.Item>
+          </Link>
+
+          {/* Link to the Shop Create page 
+          <Link to="/dashboard?tab=create-shop">
+            <Sidebar.Item
+              active={tab === "create-shop"}
+              icon={HiOutlinePlusCircle}
+              as="div"
+            >
+              Create Shop
+            </Sidebar.Item>
+          </Link>
+
+*/}
+
+      
           <Sidebar.Item
             icon={HiArrowSmRight}
             className="cursor-pointer"

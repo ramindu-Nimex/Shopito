@@ -26,20 +26,71 @@ const ShopDetails = () => {
   }, [shopID]);
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   if (error || !shop) {
-    return <div className="flex items-center justify-center h-screen text-red-500">Failed to load shop details.</div>;
+    return (
+      <div className="flex items-center justify-center h-screen text-red-500">
+        Failed to load shop details.
+      </div>
+    );
   }
 
   // Ensure imageURLs exist before accessing them
-  const images = shop.imageURLs && shop.imageURLs.length > 0 ? shop.imageURLs : [];
+  const images =
+    shop.imageURLs && shop.imageURLs.length > 0 ? shop.imageURLs : [];
+
+  // Dummy product data
+  const dummyProducts = [
+    {
+      id: 1,
+      name: "Product 1",
+      price: "$49.99",
+      image: "https://via.placeholder.com/150",
+    },
+    {
+      id: 2,
+      name: "Product 2",
+      price: "$69.99",
+      image: "https://via.placeholder.com/150",
+    },
+    {
+      id: 3,
+      name: "Product 3",
+      price: "$89.99",
+      image: "https://via.placeholder.com/150",
+    },
+    {
+      id: 4,
+      name: "Product 4",
+      price: "$99.99",
+      image: "https://via.placeholder.com/150",
+    },
+  ];
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6">
-      <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">{shop.shopName}</h1>
+      {/* Cart Button */}
+      <div className="flex justify-end fixed top-30 right-10 z-50">
+        <button className="relative p-3 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-full hover:from-teal-400 hover:to-blue-500 focus:outline-none shadow-md shadow-gray-400 hover:shadow-lg hover:shadow-gray-500 transform hover:scale-105 transition-all duration-300">
+          <i className="fas fa-cart-shopping text-2xl"></i>{" "}
+          {/* Modern Cart icon */}
+          {/* Badge showing the number of items in cart */}
+          <span className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+            3
+          </span>
+        </button>
+      </div>
+
+      <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mt-4">
+        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">
+          {shop.shopName}
+        </h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Shop Images */}
           <div className="overflow-hidden rounded-lg shadow-lg">
@@ -105,8 +156,40 @@ const ShopDetails = () => {
 
             {/* Closed Badge if the shop is closed */}
             {!shop.isOpen && (
-              <div className="text-lg font-bold text-red-600">This shop is currently closed.</div>
+              <div className="text-lg font-bold text-red-600">
+                This shop is currently closed.
+              </div>
             )}
+          </div>
+        </div>
+
+        {/* Dummy Product Tiles */}
+        <div className="mt-8">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            Products
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {dummyProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg"
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-40 object-cover rounded-lg mb-4"
+                />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  {product.name}
+                </h3>
+                <p className="text-teal-600 dark:text-teal-400 font-bold">
+                  {product.price}
+                </p>
+                <button className="mt-3 w-full bg-teal-500 text-white p-2 rounded-lg hover:bg-teal-600 transition duration-300">
+                  Add to Cart
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -15,6 +15,22 @@ import DashboardChatRoom from "./components/IT22577160/DashboardChatRoom";
 import ChatDashboardIntro from "./components/IT22577160/ChatDashboardIntro";
 import ShoppingAssistant from "./components/IT22577160/ShoppingAssistant";
 
+import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
+import ShopList from "./components/IT22350114_Components/ShopUserView_02";
+import Inventory from "./components/IT22003546_Components/InventoryUserView_01";
+import ProductUpdate from "./Pages/IT22003546_Pages/ProductUpdate_01";
+
+import ShopCreate from "./Pages/IT22350114_Pages/ShopFormPage.jsx";
+import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
+import ShopsPage from "./components/IT22350114_Components/ShopsPage.jsx";
+import ShopDetails from "./components/IT22350114_Components/ShopDetails.jsx";
+import InventoryList_01 from "./components/IT22003546_Components/InventoryList_01.jsx";
+
+import ShopitoMart from "./Pages/IT22607232_Pages/ShopitoMart";
+import ShopitoMartUpdate from "./Pages/IT22607232_Pages/ShopitoMartUpdate";
+import MarketPlace from "./Pages/IT22607232_Pages/MarketPlace";
+
+
 const App = () => {
   return (
     <>
@@ -27,6 +43,15 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
+              
+             <Route path="/marketPlace" element={<MarketPlace />} />
+            <Route path="/create-shop" element={<ShopCreate />} />
+            <Route path="/shop-list" element={<ShopListPage />} />
+            <Route path="/edit-shop/:shopId" element={<ShopCreate />} />
+            <Route path="/shops" element={<ShopsPage />} />
+            <Route path="/shops/:shopID" element={<ShopDetails />} /> {/* Add this */}
+
+
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route element={<ChatDashboard />}>
@@ -43,7 +68,18 @@ const App = () => {
                   path="/dashboard/shopAsisstant"
                   element={<ShoppingAssistant />}
                 />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/ShopitoMart" element={<ShopitoMart />} />
+              <Route
+                path="/update-order/:orderId"
+                element={<ShopitoMartUpdate />}
+              />
             </Route>
+            <Route path="/inventory-create/:shopID" element={<ProductForm />} />
+            <Route path="/shop-User:shopID" element={<ShopList />} />
+            <Route path="/shops/:shopID" element={<Inventory />} />
+            <Route path="/inventory-update/:Inventoryid" element={<ProductUpdate />} />
+            <Route path="/inventory-shop/:shopID" element={<InventoryList_01 />} />
           </Routes>
         </div>
         {/* <FooterComponent /> */}

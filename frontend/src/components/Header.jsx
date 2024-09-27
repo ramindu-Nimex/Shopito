@@ -15,19 +15,19 @@ const Header = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await fetch('/api/user/signout', {
-        method: 'POST'
-      })
-      const data = await res.json()
-      if(!res.ok) {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
         console.log(data.message);
       } else {
-        dispatch(signOutSuccess())
+        dispatch(signOutSuccess());
       }
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
   return (
     <Navbar className="border-b-2 sticky top-0 bg-slate-200 shadow-md z-40">
       <Link
@@ -91,6 +91,12 @@ const Header = () => {
       <Navbar.Collapse>
         <Navbar.Link active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
+        </Navbar.Link>
+      <Navbar.Link active={path === "/shops"} as={"div"}>
+        <Link to="/shops">Shops</Link>
+      </Navbar.Link>
+  <Navbar.Link active={path === "/MarketPlace"} as={"div"}>
+          <Link to="/MarketPlace">MarketPlace</Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About Us</Link>

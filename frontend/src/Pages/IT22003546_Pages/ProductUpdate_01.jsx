@@ -177,7 +177,7 @@ const ProductUpdate = () => {
                             type="text"
                             name="shopID"
                             value={formData.shopID}
-                            readOnly
+                            onChange={handleChange}
                             required
                         />
                     </div>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
+import DashInventory from "../components/IT22003546_Components/InventoryList_01";
+import DashShop from "../components/IT22350114_Components/ShopList";
 import DashOrder from "../components/IT22607232_Components/DashOrder";
 
 export default function Dashboard() {
@@ -22,8 +24,12 @@ export default function Dashboard() {
       </div>
       {/* profile */}
       {tab === "profile" && <DashProfile />}
+      {/* inventory */}
+      {tab === "inventory" && <DashInventory />}
+      {/* shop list */}
+      {tab === "shop-list" && <DashShop />}
       {/* Order */}
       {tab === "order" && <DashOrder />}
-    </div>
+      </div>
   )
 }

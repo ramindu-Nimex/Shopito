@@ -3,9 +3,16 @@
 @tailwind utilities;
 
 body {
-   background-color: rgb(241, 245, 241);
+  background-color: rgb(241, 245, 241);
 }
 
 .homeText {
-   text-shadow: 2px 2px 1px #d3afe7;
+  text-shadow: 2px 2px 1px #d3afe7;
+}
+
+.style {
+  background: linear-gradient(to right, #217bfe, #e55571);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }

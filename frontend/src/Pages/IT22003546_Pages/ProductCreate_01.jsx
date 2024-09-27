@@ -101,7 +101,7 @@ const ProductForm = () => {
         e.preventDefault();
         try {
             if (formData.imageURLs.length < 1) return setError('You must upload at least one image');
-            if (formData.productID === currentUser.productID) return setError('AmenityID already exists');
+            if (formData.productID === currentUser.productID) return setError('InventoryID already exists');
             setLoading(true);
             setError(false);
 

@@ -47,6 +47,11 @@ const InventorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  Discount_Applied: {
+    type: String,
+    default: "No",
+    required: false,
+  },
 });
 
 const InventoryAssist = mongoose.model("inventoryassistent", InventorySchema);

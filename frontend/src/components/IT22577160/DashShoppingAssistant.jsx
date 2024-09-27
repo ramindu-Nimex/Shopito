@@ -53,7 +53,7 @@ export default function Homepage() {
             <div className="flex justify-between">
               <div className="gap-5">
                 <h3 className="text-gray-500 text-lg uppercase font-bold">
-                  ShopIBot 
+                  Assistant 
                 </h3>
                 <FaShoppingBasket className="bg-teal-600 text-white rounded-full text-5xl p-3 shadow-lg" />
               </div>

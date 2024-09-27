@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
+import { useParams } from "react-router-dom";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import {
@@ -13,13 +14,19 @@ import {
     Alert,
     } from "flowbite-react";
 
+    const generateServiceId = () =>
+        `PDT-${Math.floor(1000 + Math.random() * 9000)}`;
+
 const ProductForm = () => {
+
+    const { shopID } = useParams();
+    console.log(shopID);
    
     const [files, setFiles] = useState([]);
     const { currentUser } = useSelector((state) => state.user);
     const [formData, setFormData] = useState({
         shopID: '',
-        productID: '',
+        productID: generateServiceId(),
         productName: '',
         productCategory: '',
         productDescription: '',
@@ -42,7 +49,7 @@ const ProductForm = () => {
         if (currentUser && currentUser.username) {
             setFormData((prev) => ({
                 ...prev,
-                shopID: currentUser.username,
+                shopID: shopID,
             }));
         }
     }, [currentUser]);
@@ -125,7 +132,7 @@ const ProductForm = () => {
             if (data.success === false) {
                 return setError(data.message);
             }
-            navigate('/dashboard?tab=inventory');
+            navigate(`/inventory-shop/${shopID}`);
         } catch (err) {
             setError(err.message);
             setLoading(false);

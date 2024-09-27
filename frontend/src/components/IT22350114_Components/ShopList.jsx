@@ -284,6 +284,12 @@ const generateExcelReport = () => {
                         >
                           Update
                         </Link>
+                        <Link
+                          className="text-teal-500 hover:underline"
+                          to={`/inventory-shop/${shop.shopID}`}
+                        >
+                          Inventory
+                        </Link>
                       </div>
                     </td>
                   </tr>

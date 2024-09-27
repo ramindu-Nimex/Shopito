@@ -54,7 +54,7 @@ export default function DashSidebar() {
 
 {currentUser.isAdmin && (    
   <>
-    <Link to="/dashboard?tab=inventory">
+    {/* <Link to="/dashboard?tab=inventory">
       <Sidebar.Item
         active={tab === "inventory"}
         icon={HiUser}
@@ -64,32 +64,21 @@ export default function DashSidebar() {
       >
         Inventory
       </Sidebar.Item>
+    </Link> */}
+    <Link to="/dashboard?tab=shop-list">
+      <Sidebar.Item
+        active={tab === "shop-list"}
+        icon={HiOutlineClipboardList}
+        as="div"
+      >
+        Shop List
+      </Sidebar.Item>
     </Link>
+
   </>
 )}
 
-/* Link to the Shop List page */
-<Link to="/dashboard?tab=shop-list">
-  <Sidebar.Item
-    active={tab === "shop-list"}
-    icon={HiOutlineClipboardList}
-    as="div"
-  >
-    Shop List
-  </Sidebar.Item>
-</Link>
 
-/* Link to the Shop Create page 
-<Link to="/dashboard?tab=create-shop">
-  <Sidebar.Item
-    active={tab === "create-shop"}
-    icon={HiOutlinePlusCircle}
-    as="div"
-  >
-    Create Shop
-  </Sidebar.Item>
-</Link>
-*/
 
       
           <Sidebar.Item

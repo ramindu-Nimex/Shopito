@@ -19,7 +19,7 @@ import ShopCreate from "./Pages/IT22350114_Pages/ShopFormPage.jsx";
 import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
 import ShopsPage from "./components/IT22350114_Components/ShopsPage.jsx";
 import ShopDetails from "./components/IT22350114_Components/ShopDetails.jsx";
-
+import InventoryList_01 from "./components/IT22003546_Components/InventoryList_01.jsx";
 
 const App = () => {
   return (
@@ -42,10 +42,11 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
-            <Route path="/inventory-create" element={<ProductForm />} />
+            <Route path="/inventory-create/:shopID" element={<ProductForm />} />
             <Route path="/shop-User:shopID" element={<ShopList />} />
             <Route path="/shops/:shopID" element={<Inventory />} />
             <Route path="/inventory-update/:Inventoryid" element={<ProductUpdate />} />
+            <Route path="/inventory-shop/:shopID" element={<InventoryList_01 />} />
           </Routes>
         </div>
         <FooterComponent />

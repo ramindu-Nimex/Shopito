@@ -10,6 +10,10 @@ import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
+import ChatDashboard from "./components/IT22577160/ChatDashboard";
+import DashboardChatRoom from "./components/IT22577160/DashboardChatRoom";
+import ChatDashboardIntro from "./components/IT22577160/ChatDashboardIntro";
+import ShoppingAssistant from "./components/IT22577160/ShoppingAssistant";
 
 import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
 import ShopList from "./components/IT22350114_Components/ShopUserView_02";
@@ -39,16 +43,31 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/signIn" element={<SignInPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-
-            <Route path="/marketPlace" element={<MarketPlace />} />
+              
+             <Route path="/marketPlace" element={<MarketPlace />} />
             <Route path="/create-shop" element={<ShopCreate />} />
             <Route path="/shop-list" element={<ShopListPage />} />
             <Route path="/edit-shop/:shopId" element={<ShopCreate />} />
             <Route path="/shops" element={<ShopsPage />} />
             <Route path="/shops/:shopID" element={<ShopDetails />} /> {/* Add this */}
 
-            <Route element={<PrivateRoute />}>
 
+            <Route element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route element={<ChatDashboard />}>
+                <Route
+                  path="/dashboard/chats"
+                  element={<ChatDashboardIntro />}
+                />
+                <Route
+                  path="/dashboard/chats/:id"
+                  element={<DashboardChatRoom />}
+                />
+              </Route>
+                <Route
+                  path="/dashboard/shopAsisstant"
+                  element={<ShoppingAssistant />}
+                />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ShopitoMart" element={<ShopitoMart />} />
               <Route
@@ -63,7 +82,7 @@ const App = () => {
             <Route path="/inventory-shop/:shopID" element={<InventoryList_01 />} />
           </Routes>
         </div>
-        <FooterComponent />
+        {/* <FooterComponent /> */}
       </Router>
       <ToastContainer
         position="bottom-center"

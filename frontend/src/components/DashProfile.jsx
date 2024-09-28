@@ -21,6 +21,8 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { GrResources } from "react-icons/gr";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -239,6 +241,17 @@ export default function DashProfile() {
           {loading ? <><Spinner size='sm'/><span className="pl-3">Loading...</span></> : 'Update'}
         </Button>
       </form>
+      {
+        currentUser.isShoppingOrderAdmin && (
+          <>
+            <Link to={'/ShopitoMart'}>
+              <Button type='submit' gradientDuoTone="pinkToOrange" className='flex flex-col gap-4 w-full uppercase my-4'>
+                <GrResources className='mr-2 text-3xl bg-red-300 rounded-full p-1 border-2' />Manage Order 
+              </Button>
+            </Link>
+          </>
+        )
+      }
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account

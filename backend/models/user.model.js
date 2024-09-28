@@ -41,6 +41,13 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    gender: {
+      type: String,
+      default: "Male",
+    },
+    age: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

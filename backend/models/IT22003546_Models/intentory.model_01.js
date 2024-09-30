@@ -41,6 +41,18 @@ const InventorySchema = new mongoose.Schema({
         }
     ],
 
+    color: 
+    { 
+        type: String, 
+        required: false 
+    },
+
+    size:
+    {
+        type: String,
+        required: false
+    },
+    
     imageURLs:
     {
         type: Array,

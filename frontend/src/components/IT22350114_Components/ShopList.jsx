@@ -7,7 +7,6 @@ import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import "jspdf-autotable";
 
-
 const ShopList = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [shopListing, setShopListing] = useState([]);
@@ -45,7 +44,6 @@ const ShopList = () => {
     }
   }, [currentUser._id]);
 
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -76,15 +74,13 @@ const ShopList = () => {
     }
   };
 
-
-
   const generatePDFReport = () => {
     const doc = new jsPDF("landscape"); // Use landscape mode for wider tables
-  
+
     // Title
     doc.setFontSize(18);
     doc.text("Shop Listings Report", 14, 22);
-  
+
     // Define the table columns and data
     const tableColumn = [
       "Shop Name",
@@ -95,7 +91,7 @@ const ShopList = () => {
       "Category",
       "Status",
     ];
-  
+
     // Mapping your shop data into a table row format
     const tableRows = shopListing.map((shop) => [
       shop.shopName,
@@ -106,7 +102,7 @@ const ShopList = () => {
       shop.shopCategory,
       shop.isOpen ? "Open" : "Closed", // Handle status
     ]);
-  
+
     // Adding the table to the PDF
     doc.autoTable({
       head: [tableColumn],
@@ -114,57 +110,54 @@ const ShopList = () => {
       startY: 30, // Position the table below the title
       theme: "grid", // You can use 'grid', 'striped', or 'plain'
     });
-  
+
     // Save the PDF
     doc.save("shop-listings-report.pdf");
   };
 
-  
-const generateCSVReport = () => {
-  const csvData = shopListing.map((shop) => ({
-    "Shop ID": shop.shopID,
-    "Shop Name": shop.shopName,
-    Location: shop.shopLocation,
-    Category: shop.shopCategory,
-    Status: shop.isOpen ? "Open" : "Closed",
-  }));
-
-  const csv = Papa.unparse(csvData);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-  link.setAttribute("href", url);
-  link.setAttribute("download", "shop-listings-report.csv");
-  link.style.visibility = "hidden";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-const generateExcelReport = () => {
-  const ws = XLSX.utils.json_to_sheet(
-    shopListing.map((shop) => ({
+  const generateCSVReport = () => {
+    const csvData = shopListing.map((shop) => ({
       "Shop ID": shop.shopID,
       "Shop Name": shop.shopName,
       Location: shop.shopLocation,
       Category: shop.shopCategory,
       Status: shop.isOpen ? "Open" : "Closed",
-    }))
-  );
+    }));
 
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Shop Listings");
-  XLSX.writeFile(wb, "shop-listings-report.xlsx");
-};
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "shop-listings-report.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
+  const generateExcelReport = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      shopListing.map((shop) => ({
+        "Shop ID": shop.shopID,
+        "Shop Name": shop.shopName,
+        Location: shop.shopLocation,
+        Category: shop.shopCategory,
+        Status: shop.isOpen ? "Open" : "Closed",
+      }))
+    );
 
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Shop Listings");
+    XLSX.writeFile(wb, "shop-listings-report.xlsx");
+  };
 
   return (
     <div className="w-full p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
       <h1 className="text-center mt-7 font-extrabold text-4xl text-gray-800 dark:text-white underline mb-10">
         Shop Listings
       </h1>
-      
+
       {currentUser?.isAdmin && (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg table-auto">
@@ -208,10 +201,13 @@ const generateExcelReport = () => {
                 </th>
               </tr>
             </thead>
-            
+
             {shopListing.length > 0 ? (
               shopListing.map((shop) => (
-                <tbody key={shop._id} className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody
+                  key={shop._id}
+                  className="divide-y divide-gray-200 dark:divide-gray-700"
+                >
                   <tr className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                       {shop.shopID}
@@ -232,7 +228,9 @@ const generateExcelReport = () => {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-gray-500 dark:text-gray-400">No Images</span>
+                        <span className="text-gray-500 dark:text-gray-400">
+                          No Images
+                        </span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
@@ -265,9 +263,13 @@ const generateExcelReport = () => {
                     </td>
                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                       {shop.isOpen ? (
-                        <span className="text-green-500 font-semibold">Open</span>
+                        <span className="text-green-500 font-semibold">
+                          Open
+                        </span>
                       ) : (
-                        <span className="text-red-500 font-semibold">Closed</span>
+                        <span className="text-red-500 font-semibold">
+                          Closed
+                        </span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -280,7 +282,7 @@ const generateExcelReport = () => {
                         </span>
                         <Link
                           className="text-teal-500 hover:underline"
-                          to={`/edit-shop/${shop._id}`}
+                          to={`/edit-shop/${shop.shopID}`}
                         >
                           Update
                         </Link>
@@ -292,7 +294,10 @@ const generateExcelReport = () => {
             ) : (
               <tbody>
                 <tr>
-                  <td colSpan="12" className="px-4 py-3 text-center text-gray-500 dark:text-gray-300">
+                  <td
+                    colSpan="12"
+                    className="px-4 py-3 text-center text-gray-500 dark:text-gray-300"
+                  >
                     No shop listings found.
                   </td>
                 </tr>
@@ -301,7 +306,7 @@ const generateExcelReport = () => {
           </table>
         </div>
       )}
-  
+
       {/* Add New Shop Button */}
       <div className="mt-8 flex justify-center">
         <Button className="text-white bg-teal-500 hover:bg-teal-600">
@@ -310,24 +315,31 @@ const generateExcelReport = () => {
           </Link>
         </Button>
       </div>
-              {/* Report Generation Buttons */}
-              <div className="mt-8 flex justify-between">
-  <Button onClick={generatePDFReport} className="text-white bg-blue-500 hover:bg-blue-600">
-    Generate PDF Report
-  </Button>
+      {/* Report Generation Buttons */}
+      <div className="mt-8 flex justify-between">
+        <Button
+          onClick={generatePDFReport}
+          className="text-white bg-blue-500 hover:bg-blue-600"
+        >
+          Generate PDF Report
+        </Button>
 
-  <Button onClick={generateCSVReport} className="text-white bg-green-500 hover:bg-green-600">
-    Generate CSV Report
-  </Button>
+        <Button
+          onClick={generateCSVReport}
+          className="text-white bg-green-500 hover:bg-green-600"
+        >
+          Generate CSV Report
+        </Button>
 
-  <Button onClick={generateExcelReport} className="text-white bg-teal-500 hover:bg-teal-600">
-    Generate Excel Report
-  </Button>
-</div>
-
+        <Button
+          onClick={generateExcelReport}
+          className="text-white bg-teal-500 hover:bg-teal-600"
+        >
+          Generate Excel Report
+        </Button>
+      </div>
     </div>
   );
-  
 };
 
 export default ShopList;

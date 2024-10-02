@@ -11,7 +11,7 @@ const ContactUs = () => {
       <div className="relative bg-white bg-opacity-70 py-10 rounded-lg shadow-2xl max-w-3xl mx-auto px-6">
         <h1 className="text-4xl font-bold text-center text-black-600 mb-6">Contact Us</h1>
         <p className="text-lg text-gray-700 text-center mb-8">
-          We would love to hear from you! Here’s how you can reach us:
+          We would love to hear from you! Here’s how you can reach us :
         </p>
 
         <div className="text-center">

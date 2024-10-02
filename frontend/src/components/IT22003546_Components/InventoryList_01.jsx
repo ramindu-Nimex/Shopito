@@ -72,6 +72,8 @@ const InventoryList_01 = () => {
             <Table.HeadCell>Product Name</Table.HeadCell>
             <Table.HeadCell>Product Category</Table.HeadCell>
             <Table.HeadCell>Product Description</Table.HeadCell>
+            {/* <Table.HeadCell>Color</Table.HeadCell>
+            <Table.HeadCell>Size</Table.HeadCell> */}
             <Table.HeadCell>Attributes</Table.HeadCell>
             <Table.HeadCell>Variations</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
@@ -86,15 +88,39 @@ const InventoryList_01 = () => {
                   <Table.Cell>{inventory.productName}</Table.Cell>
                   <Table.Cell>{inventory.productCategory}</Table.Cell>
                   <Table.Cell>{inventory.productDescription}</Table.Cell>
+                  {/* <Table.Cell>
+                    <div
+                        style={{
+                            width: '40px', // Width of the color box
+                            height: '40px', // Height of the color box
+                            backgroundColor: inventory.color, // Use the color code from your data
+                            borderRadius: '10px', // Optional: to make the corners rounded
+                            display: 'inline-block', // Ensures the box displays inline
+                            marginRight: '10px', // Optional: space between color box and text
+                        }}
+                    ></div>
+                </Table.Cell>
+
+                  <Table.Cell>{inventory.size}</Table.Cell> */}
                   <Table.Cell>
                     {inventory.attributes && inventory.attributes.length > 0
-                      ? inventory.attributes.map(attr => (
-                          <div key={attr.key}>
-                            <strong>{attr.key}:</strong> {attr.value}
-                          </div>
+                        ? inventory.attributes.map(attr => (
+                            <div key={attr.key} className="flex items-center mb-1"> {/* Flex for alignment */}
+                                <div
+                                    style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        backgroundColor: attr.key, // Use the color code as the background color
+                                        borderRadius: '3px',
+                                        marginRight: '5px', // Space between color box and text
+                                    }}
+                                ></div>
+                                <strong>{attr.key}</strong> 
+                            </div>
                         ))
-                      : 'No attributes'}
-                  </Table.Cell>
+                        : 'No attributes'}
+                </Table.Cell>
+
                   <Table.Cell>
                     {inventory.variations && inventory.variations.length > 0
                       ? inventory.variations.map((variation, index) => (
@@ -102,7 +128,6 @@ const InventoryList_01 = () => {
                             <strong>{variation.variantName}</strong><br />
                             Quantity: {variation.quantity}<br />
                             Price: ${variation.price}<br />
-                            Images: {variation.images.join(', ')}
                           </div>
                         ))
                       : 'No variations'}
@@ -120,11 +145,16 @@ const InventoryList_01 = () => {
                     )}
                   </Table.Cell>
                   <Table.Cell>
-                    <Button onClick={() => handleInventoryDelete(inventory._id)} color="failure">Delete</Button>
-                    <Link to={`/inventory-update/${inventory._id}`}>
-                      <Button>Update</Button>
-                    </Link>
-                  </Table.Cell>
+                    <div className="flex space-x-2"> {/* Use flexbox to align buttons horizontally */}
+                        <Button onClick={() => handleInventoryDelete(inventory._id)} color="failure">
+                            Delete
+                        </Button>
+                        <Link to={`/inventory-update/${inventory._id}?shopID=${shopID}`}>
+                            <Button>Update</Button>
+                        </Link>
+                    </div>
+                </Table.Cell>
+
                 </Table.Row>
               ))
             ) : (

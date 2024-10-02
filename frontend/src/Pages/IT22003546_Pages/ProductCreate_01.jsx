@@ -220,6 +220,7 @@ const ProductForm = () => {
                             name="productID"
                             value={formData.productID}
                             onChange={handleChange}
+                            readOnly
                             required
                             
                         />
@@ -235,14 +236,25 @@ const ProductForm = () => {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="productCategory">Product Category</Label>
-                        <Textarea
+                        <Label htmlFor="productCategory" className="block mb-2 text-sm font-medium text-gray-700">Product Category</Label>
+                        <select
                             name="productCategory"
                             value={formData.productCategory}
                             onChange={handleChange}
                             required
-                        />
+                            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                            <option value="" disabled>Select a category</option> {/* Default option */}
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Home & Kitchen">Home & Kitchen</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Toys">Toys</option>
+                            {/* Add more categories as needed */}
+                        </select>
                     </div>
+
 
                     <div>
                         <Label htmlFor="productDescription">Product Description</Label>
@@ -254,10 +266,53 @@ const ProductForm = () => {
                             required
                         />
                     </div>
+
+                    {/* <div>
+                        <Label htmlFor="color">Color</Label>
+                        <select
+                            name="color"
+                            value={formData.color}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full p-2 border rounded"
+                        >
+                            <option value="">Select a color</option>
+                            <option value="#FF0000">Red</option>
+                            <option value="#00FF00">Green</option>
+                            <option value="#0000FF">Blue</option>
+                            <option value="#FFFF00">Yellow</option>
+                            <option value="#FFA500">Orange</option>
+                            <option value="#800080">Purple</option>
+                            <option value="#FFFFFF">White</option>
+                            <option value="#000000">Black</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <Label htmlFor="size">Color</Label>
+                        <select
+                            name="size"
+                            value={formData.size}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full p-2 border rounded"
+                        >
+                            <option value="">Select a size</option>
+                            <option value="XXS">XXS</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="XXXL">XXXL</option>
+                        </select>
+                    </div> */}
+
                     
                     {/* Attributes Section */}
                     <div>
-                        <h3 className="text-lg font-medium">Attributes</h3>
+                        <h3 className="text-lg font-medium">Color / Size</h3>
                         {formData.attributes && formData.attributes.length > 0 ? (
                             formData.attributes.map((attribute, index) => (
                                 <div key={index} className="flex space-x-2 mb-2">

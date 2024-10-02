@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { app } from "../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -14,10 +14,13 @@ import {
 } from "flowbite-react";
 
 const ProductUpdate = () => {
+    const location = useLocation(); // Access location to get query parameters
+    const queryParams = new URLSearchParams(location.search);
+    const shopID = queryParams.get("shopID"); // Get the shopID from the query parameters
     const { Inventoryid } = useParams(); // Assuming you are using react-router to get the product ID from the URL
     const { currentUser } = useSelector((state) => state.user);
     const [formData, setFormData] = useState({
-        shopID: currentUser.username || '',
+        shopID: shopID || '',
         productID: '',
         productName: '',
         productCategory: '',
@@ -41,7 +44,7 @@ const ProductUpdate = () => {
             try {
                 const response = await fetch(`/api/inventory/fetch/${Inventoryid}`);
                 const data = await response.json();
-
+                setFormData({ attributes: data.attributes }); // Assuming data.attributes contains your attribute data
                 console.log("Fetched product data from DB:", data);
 
                 if (data.success === false) {
@@ -51,13 +54,14 @@ const ProductUpdate = () => {
                 
                 setFormData((prevData) => ({
                     ...prevData,
-                            shopID: currentUser.username || '',
+                            shopID: shopID || '',
                             productID: data.productID,
                             productName: data.productName,
                             productCategory: data.productCategory,
                             productDescription: data.productDescription,
                             productStatus: data.productStatus,
                             imageURLs: data.imageURLs || [],
+                            variations: data.variations || [],
                 
                 }));
 
@@ -68,6 +72,33 @@ const ProductUpdate = () => {
 
         fetchProductData();
     }, [Inventoryid, currentUser.username]);
+
+    const handleAddAttribute = () => {
+        setFormData((prev) => ({
+            ...prev,
+            attributes: [...prev.attributes, { key: "", value: "" }]
+        }));
+    };
+
+    const handleRemoveAttribute = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            attributes: prev.attributes.filter((_, i) => i !== index)
+        }));
+    };
+    const handleAddVariation = () => {
+        setFormData((prev) => ({
+            ...prev,
+            variations: [...prev.variations, { variantName: "", quantity: "", price: "", images: [] }]
+        }));
+    };
+
+    const handleRemoveVariation = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            variations: prev.variations.filter((_, i) => i !== index)
+        }));
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -101,7 +132,7 @@ const ProductUpdate = () => {
             if (data.success === false) {
                 return setError(data.message);
             }
-            navigate('/dashboard?tab=inventory');
+            navigate(`/inventory-shop/${shopID}`);
         } catch (err) {
             setError(err.message);
             setLoading(false);
@@ -202,13 +233,23 @@ const ProductUpdate = () => {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="productCategory">Product Category</Label>
-                        <Textarea
+                        <Label htmlFor="productCategory" className="block mb-2 text-sm font-medium text-gray-700">Product Category</Label>
+                        <select
                             name="productCategory"
                             value={formData.productCategory}
                             onChange={handleChange}
                             required
-                        />
+                            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                            <option value="" disabled>Select a category</option> {/* Default option */}
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Home & Kitchen">Home & Kitchen</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Toys">Toys</option>
+                            {/* Add more categories as needed */}
+                        </select>
                     </div>
                     <div>
                         <Label htmlFor="productDescription">Product Description</Label>
@@ -220,6 +261,129 @@ const ProductUpdate = () => {
                             required
                         />
                     </div>
+                    {/* Attributes Section */}
+                    <div>
+                        <h3 className="text-lg font-medium">Color / Size</h3>
+                        {formData.attributes && formData.attributes.length > 0 ? (
+                            formData.attributes.map((attribute, index) => (
+                                <div key={index} className="flex space-x-2 mb-2">
+                                    <TextInput
+                                        type="text"
+                                        placeholder="Key"
+                                        value={attribute.key || ""}
+                                        onChange={(e) => {
+                                            const newAttributes = [...formData.attributes];
+                                            newAttributes[index] = {
+                                                ...newAttributes[index],
+                                                key: e.target.value
+                                            };
+                                            setFormData(prev => ({ ...prev, attributes: newAttributes }));
+                                        }}
+                                        className="p-2 border rounded w-1/2"
+                                    />
+                                    <TextInput
+                                        type="text"
+                                        placeholder="Value"
+                                        value={attribute.value || ""}
+                                        onChange={(e) => {
+                                            const newAttributes = [...formData.attributes];
+                                            newAttributes[index] = {
+                                                ...newAttributes[index],
+                                                value: e.target.value
+                                            };
+                                            setFormData(prev => ({ ...prev, attributes: newAttributes }));
+                                        }}
+                                        className="p-2 border rounded w-1/2"
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleRemoveAttribute(index)}
+                                        className="p-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No attributes added yet.</p>
+                        )}
+                        <Button
+                            type="button"
+                            onClick={handleAddAttribute}
+                            className="p-2 bg-blue-500 text-white rounded"
+                        >
+                            Add Attribute
+                        </Button>
+                    </div>
+                    {/* Variations Section */}
+                    <div>
+                        <h3 className="text-lg font-medium">Variations</h3>
+                        {formData.variations && formData.variations.length > 0 ? (
+                            formData.variations.map((variation, index) => (
+                                <div key={index} className="space-y-2 mb-2">
+                                    <TextInput
+                                        type="text"
+                                        placeholder="Variant Name"
+                                        value={variation.variantName || ""}
+                                        onChange={(e) => {
+                                            const newVariations = [...formData.variations];
+                                            newVariations[index] = {
+                                                ...newVariations[index],
+                                                variantName: e.target.value
+                                            };
+                                            setFormData(prev => ({ ...prev, variations: newVariations }));
+                                        }}
+                                        className="p-2 border rounded w-full"
+                                    />
+                                    <TextInput
+                                        type="number"
+                                        placeholder="Quantity"
+                                        value={variation.quantity || ""}
+                                        onChange={(e) => {
+                                            const newVariations = [...formData.variations];
+                                            newVariations[index] = {
+                                                ...newVariations[index],
+                                                quantity: e.target.value
+                                            };
+                                            setFormData(prev => ({ ...prev, variations: newVariations }));
+                                        }}
+                                        className="p-2 border rounded w-full"
+                                    />
+                                    <TextInput
+                                        type="number"
+                                        placeholder="Price"
+                                        value={variation.price || ""}
+                                        onChange={(e) => {
+                                            const newVariations = [...formData.variations];
+                                            newVariations[index] = {
+                                                ...newVariations[index],
+                                                price: e.target.value
+                                            };
+                                            setFormData(prev => ({ ...prev, variations: newVariations }));
+                                        }}
+                                        className="p-2 border rounded w-full"
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleRemoveVariation(index)}
+                                        className="p-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No variations added yet.</p> 
+                        )}
+                        <Button
+                            type="button"
+                            onClick={handleAddVariation}
+                            className="p-2 bg-blue-500 text-white rounded"
+                        >
+                            Add Variation
+                        </Button>
+                    </div>
+
                     <div>
                         <Label htmlFor="productStatus">Product Status</Label>
                         <select

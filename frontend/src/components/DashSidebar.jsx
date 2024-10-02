@@ -91,7 +91,23 @@ export default function DashSidebar() {
 
   </>
 )}
- {currentUser.isShoppingOrderAdmin && (
+          {currentUser.isAdmin && (
+            <>
+              <Link to="/dashboard?tab=shop-list">
+                <Sidebar.Item
+                  active={tab === "shop-list"}
+                  icon={HiOutlineClipboardList}
+                  label="Inventory"
+                  labelColor="dark"
+                  as="div"
+                >
+                  Shop List
+                </Sidebar.Item>
+              </Link>
+            </>
+          )}
+
+          {currentUser.isShoppingOrderAdmin && (
             <>
               <Link to="/dashboard?tab=order">
                 <Sidebar.Item

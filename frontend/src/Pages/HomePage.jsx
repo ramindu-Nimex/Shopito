@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom'
 export default function HomePage() {
   const [text] = useTypewriter({
     words: [
-      "seamless environments.",
-      "secure surroundings.",
-      "a symbol of reliability.",
-      "elevated spaces of distinction.",
+      "convenient shopping experiences.",
+      "luxury at every corner.",
+      "your shopping destination.",
+      "unmatched variety and convenience."
     ],
     loop: true,
     typeSpeed: 60,

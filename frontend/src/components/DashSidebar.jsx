@@ -91,6 +91,7 @@ export default function DashSidebar() {
 
   </>
 )}
+{/*
           {currentUser.isAdmin && (
             <>
               <Link to="/dashboard?tab=shop-list">
@@ -106,7 +107,7 @@ export default function DashSidebar() {
               </Link>
             </>
           )}
-
+*/}
           {currentUser.isShoppingOrderAdmin && (
             <>
               <Link to="/dashboard?tab=order">

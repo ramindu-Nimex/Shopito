@@ -105,7 +105,7 @@ export const getAllReservedItems = async (req, res, next) => {
         // return item;
 
         // Set the isExpired property based on the reservation time
-      item.isExpired = diffInSeconds > 259200; // true if expired
+      item.isExpired = diffInSeconds >259200; // true if expired
 
       return item;
       });

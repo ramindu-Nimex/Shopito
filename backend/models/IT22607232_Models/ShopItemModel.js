@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+// Define the expiration duration (e.g., 1 day = 24 hours in milliseconds)
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
 const ShoppingItemsSchema = new mongoose.Schema(
   {
     userId: {
@@ -22,7 +25,8 @@ const ShoppingItemsSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrhUG-tmEtXi0YhOg4K-qx-VQ5_Ei5Ujqdjg&s"
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrhUG-tmEtXi0YhOg4K-qx-VQ5_Ei5Ujqdjg&s",
     },
     quantity: {
       type: Number,
@@ -30,7 +34,7 @@ const ShoppingItemsSchema = new mongoose.Schema(
     },
     condition: {
       type: Number,
-      required: true
+      required: true,
     },
     description: {
       type: String,
@@ -51,14 +55,18 @@ const ShoppingItemsSchema = new mongoose.Schema(
     slug: {
       type: String,
       required: true,
-      unique: true
-   },
+      unique: true,
+    },
+
+    reserved: {
+  type: Boolean,
+  default: false,
+}
+
   },
-  { timestamps: true }
+  { timestamps: true } // Adds createdAt and updatedAt timestamps automatically
 );
 
-const ShoppingItemsMart = mongoose.model(
-  "ShoppingItemsMart",
-  ShoppingItemsSchema
-);
+
+const ShoppingItemsMart = mongoose.model("ShoppingItemsMart", ShoppingItemsSchema);
 export default ShoppingItemsMart;

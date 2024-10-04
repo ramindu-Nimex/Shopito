@@ -4,6 +4,7 @@ import themeReducer from './theme/themeSlice.js'
 import cartReducer from './IT22607232/cartSlice.js'
 import wishlistReducer from './IT22607232/wishList.js'
 import ratingReducer from './IT22607232/ratingSlice.js'
+import reserveSlice from './IT22607232/reserveSlice.js'
 import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
    cart: cartReducer,
    wishlist: wishlistReducer,
    rating: ratingReducer,
+   reserve: reserveSlice,
 })
 
 const persistConfig = {

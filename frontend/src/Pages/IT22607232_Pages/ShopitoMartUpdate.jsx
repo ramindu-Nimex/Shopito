@@ -133,25 +133,12 @@ const handleSubmit = async (e) => {
             <TextInput type="text" onChange={handleChange}  value={formData.title} placeholder="Title" required id="title" className="flex-1"/>
             <Select className="" onChange={(e) => setFormData({...formData, category: e.target.value})}>
                <option value="Uncategorized">Select a Category</option>
-               <option value="Refrigerator">Refrigerator</option>
-               <option value="Heaters">Heaters</option>
-               <option value="MicroWave">MicroWave</option>
-               <option value="Speakers">Speakers</option>
-               <option value="Washing Machine">Washing Machine</option>
-               <option value="DiningTable">Dining Table</option>
-               <option value="Credenza">Credenza</option>
-               <option value="ArmChair">Arm Chair</option>
-               <option value="BesideTable">Bedside Table</option>
-               <option value="Dresser">Dresser</option>
-               <option value="Cabinet">Cabinet</option>
-               <option value="WoodenBench">Wooden Bench</option>
-               <option value="ElectricDrill">Electric Drill</option>
-               <option value="Pruning Shares">Pruning Shares</option>
-               <option value="Hedge Shares">Hedge Shares</option>
-               <option value="Mower">Mower</option>
-               <option value="Hedge Trimmer">Hedge Trimmer</option>
-               <option value="Pruning Saw">Pruning Saw</option>
-               <option value="Ladder">Ladder</option>
+               <option value="Clothing">Clothing</option>
+               <option value="Accessories">Accessories</option>
+               <option value="Electronic">Electronic</option>
+               <option value="Child Items">Child Items</option>
+               <option value="Food">Food</option>
+               <option value="Foot Wear">Foot Wear</option>
             </Select>
          </div>
          <TextInput type="text" onChange={handleChange}  value={formData.shop} placeholder="Shop" required id="shop" />

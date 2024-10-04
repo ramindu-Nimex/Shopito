@@ -29,6 +29,8 @@ import InventoryList_01 from "./components/IT22003546_Components/InventoryList_0
 import ShopitoMart from "./Pages/IT22607232_Pages/ShopitoMart";
 import ShopitoMartUpdate from "./Pages/IT22607232_Pages/ShopitoMartUpdate";
 import MarketPlace from "./Pages/IT22607232_Pages/MarketPlace";
+import ReservePage from "./components/IT22607232_Components/ReservePage.jsx";
+import SearchOrder from "./Pages/IT22607232_Pages/SearchOrder.jsx";
 
 
 const App = () => {
@@ -74,12 +76,16 @@ const App = () => {
                 path="/update-order/:orderId"
                 element={<ShopitoMartUpdate />}
               />
+              {/* <Route path="/reserve" element={<ReservePage />} /> */}
+              <Route path="/reserve" element={<ReservePage/>} />
             </Route>
             <Route path="/inventory-create/:shopID" element={<ProductForm />} />
             <Route path="/shop-User:shopID" element={<ShopList />} />
             <Route path="/shops/:shopID" element={<Inventory />} />
             <Route path="/inventory-update/:Inventoryid" element={<ProductUpdate />} />
             <Route path="/inventory-shop/:shopID" element={<InventoryList_01 />} />
+
+            <Route path="/searchResource" element={<SearchOrder />} />
           </Routes>
         </div>
         {/* <FooterComponent /> */}

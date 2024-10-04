@@ -24,7 +24,6 @@ import {
 } from "../../redux/IT22607232/ratingSlice";
 import { Button, Alert } from "flowbite-react";
 
-
 export default function MarketPlace() {
   const [resources, setResources] = useState([]);
   const [showMore, setShowMore] = useState(false);
@@ -70,23 +69,21 @@ export default function MarketPlace() {
     }
   };
 
-
-
   // Inside your component
   const handleReserve = async (id) => {
     try {
       const res = await fetch(`/api/order/reserve/${id}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
       const data = await res.json();
-  
+
       if (res.ok) {
         // Show success message with toastify
         toast.success("Item reserved successfully!");
-  
+
         // // Redirect to the "Reserved Items" page after 3 seconds
         // setTimeout(() => {
         //   window.location.href = "/reserve/:itemId"; // Update with the correct route for your reserved items page
@@ -100,7 +97,6 @@ export default function MarketPlace() {
       toast.error("An error occurred while reserving the item");
     }
   };
-  
 
   const addToCartHandler = async (id) => {
     const existingItem = cart && cart.find((i) => i._id === id);
@@ -238,7 +234,7 @@ export default function MarketPlace() {
                               ? resource.regularPrice + " $"
                               : resource.regularPrice -
                                 resource.discountPrice +
-                                " $" }
+                                " $"}
                           </h5>
                           <h4 className="font-[500] text-[16px] text-[#d55b45] pl-3 mt-[-4px] line-through">
                             {resource.regularPrice
@@ -270,22 +266,25 @@ export default function MarketPlace() {
                             className="cursor-pointer"
                             title="View"
                           />
-                          <AiOutlineSearch size={22} className="cursor-pointer" />
+                          <AiOutlineSearch
+                            size={22}
+                            className="cursor-pointer"
+                          />
                           <AiOutlineShoppingCart
                             size={22}
                             onClick={() => addToCartHandler(resource._id)}
                             className="cursor-pointer"
                             title="Add to cart"
                           />
-                          <Button
-                            color="success"
+
+                        </div>
+                        <Button
                             onClick={() => handleReserve(resource._id)}
-                            className="cursor-pointer text-sm"
+                            className="cursor-pointer text-sm  bg-gradient-to-r from-purple-500 to-rose-500 text-white mb-4 ml-2 "
                             title="Reserve Item"
                           >
                             Reserve
                           </Button>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -299,11 +298,7 @@ export default function MarketPlace() {
             )}
           </div>
         )}
-        {reserveMessage && (
-          <Alert color="success">
-            {reserveMessage}
-          </Alert>
-        )}
+        {reserveMessage && <Alert color="success">{reserveMessage}</Alert>}
       </div>
     </>
   );

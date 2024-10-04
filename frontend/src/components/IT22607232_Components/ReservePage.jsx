@@ -47,54 +47,62 @@ export default function ReservePage() {
   }
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Reserved Items List</h1>
-      {reservedItems.length > 0 ? (
-        <table className="table-auto w-full bg-white border-collapse shadow-lg rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border px-6 py-4 text-left">Image</th>
-              <th className="border px-6 py-4 text-left">Name</th>
-              <th className="border px-6 py-4 text-left">Category</th>
-              <th className="border px-6 py-4 text-left">Price</th>
-              <th className="border px-6 py-4 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservedItems.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200">
-                <td className="border px-6 py-4">
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    className="w-20 h-20 object-cover rounded-lg shadow-md" 
-                  />
-                </td>
-                <td className="border px-6 py-4">{item.title}</td>
-                <td className="border px-6 py-4">{item.category}</td>
-                <td className="border px-6 py-4">
-                  {item.offer ? (
-                    <span className="text-green-500 font-bold">${item.discountPrice}</span>
-                  ) : (
-                    <span>${item.regularPrice}</span>
-                  )}
-                </td>
-                <td className="border px-6 py-4">
-                  <span
-                    className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                      item.isExpired ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
-                    }`}
-                  >
-                    {item.isExpired ? 'Expired' : 'Reserved'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p className="text-center text-lg">Loading reserved items...</p>
-      )}
+    <div className="min-h-screen">
+      {/* Light color background at the top */}
+      <div className="p-4 bg-dark shadow-md">
+        <h1 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-rose-500 dark:from-purple-700 dark:to-rose-600">Reserved Items List</h1>
+      </div>
+      {/* Gradient background below */}
+      <div className="p-4 bg-gradient-to-r from-purple-500 to-rose-500 dark:from-purple-700 dark:to-rose-600">
+        {reservedItems.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full bg-white dark:bg-gray-800 border-collapse shadow-lg rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-gray-100 dark:bg-gray-900">
+                  <th className="border px-6 py-4 text-left">Image</th>
+                  <th className="border px-6 py-4 text-left">Name</th>
+                  <th className="border px-6 py-4 text-left">Category</th>
+                  <th className="border px-6 py-4 text-left">Price</th>
+                  <th className="border px-6 py-4 text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reservedItems.map((item) => (
+                  <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200 dark:hover:bg-gray-700">
+                    <td className="border px-6 py-4">
+                      <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        className="w-20 h-20 object-cover rounded-lg shadow-md" 
+                      />
+                    </td>
+                    <td className="border px-6 py-4 text-gray-800 dark:text-white">{item.title}</td>
+                    <td className="border px-6 py-4 text-gray-800 dark:text-white">{item.category}</td>
+                    <td className="border px-6 py-4 text-gray-800 dark:text-white">
+                      {item.offer ? (
+                        <span className="text-green-500 font-bold">${item.discountPrice}</span>
+                      ) : (
+                        <span>${item.regularPrice}</span>
+                      )}
+                    </td>
+                    <td className="border px-6 py-4">
+                      <span
+                        className={`px-3 py-1 text-sm font-semibold rounded-full ${
+                          item.isExpired ? 'bg-red-100 text-red-600 dark:bg-red-500 dark:text-white' : 'bg-green-100 text-green-600 dark:bg-green-500 dark:text-white'
+                        }`}
+                      >
+                        {item.isExpired ? 'Expired' : 'Reserved'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-center text-lg text-white">Loading reserved items...</p>
+        )}
+      </div>
     </div>
   );
 }

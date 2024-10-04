@@ -19,7 +19,7 @@ export default function MarketPlaceHeader() {
   const [openWishlist, setOpenWishlist] = useState(false);
   return (
     <Navbar className="border-b-2 sticky top-16 bg-[#3321c8] dark:bg-slate-600 z-40 flex justify-between">
-      <Link to="/games">
+      <Link to="/reserve">
         <Button
           color="dark"
           className="sm:flex items-center relative w-[200px] h-14 sm:w-[270px] hidden"
@@ -27,7 +27,7 @@ export default function MarketPlaceHeader() {
           <span>
             <HiStar className="mr-2" size={25} />
           </span>{" "}
-          Latest Deals
+          Reserved shopitos
         </Button>
       </Link>
       <div className="flex items-center">

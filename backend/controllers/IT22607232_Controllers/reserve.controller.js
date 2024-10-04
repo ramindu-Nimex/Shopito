@@ -45,6 +45,8 @@ export const reserveShoppingItem = async (req, res, next) => {
   }
 };
 
+
+
 // Controller for fetching reserved item details
 export const getReservedItemDetails = async (req, res, next) => {
     try {
@@ -77,6 +79,9 @@ export const getReservedItemDetails = async (req, res, next) => {
 
 
 
+
+
+
 // Controller for fetching all reserved items
 export const getAllReservedItems = async (req, res, next) => {
     try {
@@ -100,7 +105,7 @@ export const getAllReservedItems = async (req, res, next) => {
         // return item;
 
         // Set the isExpired property based on the reservation time
-      item.isExpired = diffInSeconds > 60; // true if expired
+      item.isExpired = diffInSeconds > 259200; // true if expired
 
       return item;
       });

@@ -67,9 +67,9 @@ const ShoppingAssistant = () => {
     <>
       <div className="min-h-screen">
         <div className="max-w-3xl w-full mx-auto bg-slate-200 dark:bg-slate-800 border-2 dark:border-teal-600 rounded-md shadow-lg p-8 my-6">
-          <h2 className="text-3xl font-bold text-center ">
-            🛍️{" "}
-            <span className="style">ShopI Bot - Your Shopping Assistant!</span>
+          <h2 className="text-3xl font-bold text-center flex items-center gap-7">
+            <img src="/bot.png" alt="" className="botForm w-20 h-20 ml-5" />{" "}
+            <span className="style">Fav Finder - Your Shopping Assistant!</span>
           </h2>
           <p className="text-center text-xs font-medium mb-8 text-slate-500">
             Let’s find the perfect product for you!
@@ -110,7 +110,7 @@ const ShoppingAssistant = () => {
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
             >
-              <option value="Uncategorized">Select a Category</option>
+              <option value="Uncategorized">Yes or No</option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </Select>
@@ -157,7 +157,7 @@ const ShoppingAssistant = () => {
                       {preferredProduct.map((product) => (
                         <div
                           key={product.productID}
-                          className="rounded-lg p-4 border-2 dark:border-teal-600  shadow-lg"
+                          className="rounded-lg p-4 border-2 dark:border-teal-600  shadow-lg my-4"
                         >
                           <h3 className="text-lg font-semibold text-teal-600">
                             {product.productName} 🛒

@@ -16,3 +16,8 @@ body {
   -webkit-background-clip: text;
   color: transparent;
 }
+
+.botForm {
+  object-fit: contain;
+  animation: 3s ease-in-out infinite alternate botAnimate;
+}

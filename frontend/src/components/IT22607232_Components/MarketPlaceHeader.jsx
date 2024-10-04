@@ -7,10 +7,9 @@ import {
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { CgGames } from "react-icons/cg";
-import { AiOutlineStar } from "react-icons/ai";
 import WishListPopUp from "./WishListPopUp";
 import CartPopUp from "./CartPopUp";
+import { HiStar } from "react-icons/hi";
 
 export default function MarketPlaceHeader() {
   const { cart } = useSelector((state) => state.cart);
@@ -26,9 +25,9 @@ export default function MarketPlaceHeader() {
           className="sm:flex items-center relative w-[200px] h-14 sm:w-[270px] hidden"
         >
           <span>
-            <CgGames className="mr-2" size={25} />
+            <HiStar className="mr-2" size={25} />
           </span>{" "}
-          Let's Play Games
+          Latest Deals
         </Button>
       </Link>
       <div className="flex items-center">
@@ -60,17 +59,9 @@ export default function MarketPlaceHeader() {
           />
         </form>
         {/* cart popup */}
-        {
-               openCart && (
-                  <CartPopUp setOpenCart={setOpenCart} />
-               )
-            }
-            {/* wishlist popup */}
-            {
-               openWishlist && (
-                  <WishListPopUp setOpenWishlist={setOpenWishlist} />
-               )
-            }
+        {openCart && <CartPopUp setOpenCart={setOpenCart} />}
+        {/* wishlist popup */}
+        {openWishlist && <WishListPopUp setOpenWishlist={setOpenWishlist} />}
       </div>
     </Navbar>
   );

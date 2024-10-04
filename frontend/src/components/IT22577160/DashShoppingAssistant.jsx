@@ -28,7 +28,7 @@ export default function Homepage() {
     <div className="homepage">
       <img src="/orbital.png" alt="" className="orbital" />
       <div className="left">
-        <h1 className="ml-6 font-semibold">ShopI Bot</h1>
+        <h1 className="ml-6 font-semibold">FavFinder</h1>
         <h2 className="text-2xl font-semibold">Supercharge your creativity and productivity</h2>
         <h3 className="text-xs font-medium">
           Meet Shopito Bot, your personal shopping genie! With a quick chat, it

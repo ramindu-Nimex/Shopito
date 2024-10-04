@@ -229,8 +229,6 @@ export const getFilteredProducts = async (req, res, next) => {
     };
 
     res.status(200).send(finalResponse);
-
-    console.log("Final response:", finalResponse);
   } catch (error) {
     console.error("Error fetching products:", error);
     next(error);

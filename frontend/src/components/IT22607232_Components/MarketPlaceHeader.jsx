@@ -6,7 +6,7 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import WishListPopUp from "./WishListPopUp";
 import CartPopUp from "./CartPopUp";
 import { HiStar } from "react-icons/hi";
@@ -17,6 +17,25 @@ export default function MarketPlaceHeader() {
   const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/searchResource?${searchQuery}`);
+  };
+
   return (
     <Navbar className="border-b-2 sticky top-16 bg-[#3321c8] dark:bg-slate-600 z-40 flex justify-between">
       <Link to="/reserve">
@@ -49,13 +68,13 @@ export default function MarketPlaceHeader() {
             {cart && cart.length}
           </span>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             type="text"
             placeholder="Search..."
             rightIcon={AiOutlineSearch}
-            // value={searchTerm}
-            // onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
         {/* cart popup */}

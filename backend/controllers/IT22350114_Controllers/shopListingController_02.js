@@ -32,12 +32,11 @@ export const getAllShopListings = async (req, res, next) => {
   }
 };
 
-// Fetch a specific shop listing
+// Fetch a specific shop listing by shopID
 export const getShopListing = async (req, res, next) => {
   try {
-    const { shopId } = req.params;
-    // Use findOne instead of findById, querying by your custom shopID field
-    const shopListing = await ShopListing.findOne({ shopID: shopId });
+    const { shopId } = req.params;  // Retrieve shopID from params
+    const shopListing = await ShopListing.findOne({ shopID: shopId });  // Use findOne with shopID
     
     if (!shopListing) {
       return res.status(404).json({ message: "Shop listing not found" });
@@ -48,21 +47,24 @@ export const getShopListing = async (req, res, next) => {
   }
 };
 
-// Update a shop listing
+
+// Update a shop listing using shopID
 export const updateShopListing = async (req, res, next) => {
   try {
-    const { shopId } = req.params;
-    const updateShopListing = await ShopListing.findByIdAndUpdate(
-      shopId,
+    const { shopId } = req.params;  // Retrieve shopID from params
+    const updateShopListing = await ShopListing.findOneAndUpdate(
+      { shopID: shopId },  // Find by shopID, not _id
       req.body,
-      { new: true, upsert: true }
+      { new: true, upsert: true }  // Return the updated document and upsert if not found
     );
+    if (!updateShopListing) {
+      return res.status(404).json({ message: "Shop listing not found" });
+    }
     return res.status(200).json(updateShopListing);
   } catch (error) {
     next(error);
   }
 };
-
 // Delete a shop listing
 export const deleteShopListing = async (req, res, next) => {
   try {

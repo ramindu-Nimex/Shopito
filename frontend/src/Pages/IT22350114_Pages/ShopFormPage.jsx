@@ -16,6 +16,7 @@ const ShopCreate = () => {
   const { shopId } = useParams(); // Get the shop ID from the URL
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
+    ownerID: currentUser.username,
     shopID: generateServiceId(),
     shopName: "",
     shopLocation: "",
@@ -185,10 +186,20 @@ const ShopCreate = () => {
   return (
     <main className="p-3 max-w-4xl mx-auto mb-10">
       <h1 className="text-2xl text-center font-semibold mb-5">
-        Create a Shop Listing
+        {shopId ? "Update a Shop Listing" : "Create a Shop Listing"}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
+          <div>
+            <Label htmlFor="ownerID">Owner ID</Label>
+            <TextInput
+              type="text"
+              name="ownerID"
+              value={formData.ownerID}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div>
             <Label htmlFor="shopID">Shop ID</Label>
             <TextInput
@@ -230,24 +241,24 @@ const ShopCreate = () => {
             />
           </div>
           <div>
-  <Label htmlFor="shopCategory">Shop Category:</Label>
-  <select
-    id="shopCategory" // Add an id to the select element to match htmlFor in Label
-    name="shopCategory"
-    value={formData.shopCategory}
-    onChange={handleChange} // Ensure the handleChange is properly managing the state
-    required
-    className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-300"
-  >
-    <option value="" disabled>Select a category</option>
-    <option value="Clothing">Clothing</option>
-    <option value="Electronics">Electronics</option>
-    <option value="Groceries">Groceries</option>
-    <option value="Home Decor">Home Decor</option>
-    <option value="Books">Books</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
+            <Label htmlFor="shopCategory">Shop Category:</Label>
+            <select
+              id="shopCategory" // Add an id to the select element to match htmlFor in Label
+              name="shopCategory"
+              value={formData.shopCategory}
+              onChange={handleChange} // Ensure the handleChange is properly managing the state
+              required
+              className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-300"
+            >
+              <option value="" disabled>Select a category</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Home Decor">Home Decor</option>
+              <option value="Books">Books</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           <div>
             <Label htmlFor="shopPhone">Shop Phone:</Label>

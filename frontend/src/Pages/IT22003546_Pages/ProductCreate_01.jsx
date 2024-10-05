@@ -319,6 +319,7 @@ const ProductForm = () => {
                                     <TextInput
                                         type="text"
                                         placeholder="Key"
+                                        required
                                         value={attribute.key || ""}
                                         onChange={(e) => {
                                             const newAttributes = [...formData.attributes];
@@ -333,6 +334,7 @@ const ProductForm = () => {
                                     <TextInput
                                         type="text"
                                         placeholder="Value"
+                                        required
                                         value={attribute.value || ""}
                                         onChange={(e) => {
                                             const newAttributes = [...formData.attributes];
@@ -375,6 +377,7 @@ const ProductForm = () => {
                                     <TextInput
                                         type="text"
                                         placeholder="Variant Name"
+                                        required
                                         value={variation.variantName || ""}
                                         onChange={(e) => {
                                             const newVariations = [...formData.variations];
@@ -389,6 +392,7 @@ const ProductForm = () => {
                                     <TextInput
                                         type="number"
                                         placeholder="Quantity"
+                                        required
                                         value={variation.quantity || ""}
                                         onChange={(e) => {
                                             const newVariations = [...formData.variations];
@@ -403,6 +407,7 @@ const ProductForm = () => {
                                     <TextInput
                                         type="number"
                                         placeholder="Price"
+                                        required
                                         value={variation.price || ""}
                                         onChange={(e) => {
                                             const newVariations = [...formData.variations];

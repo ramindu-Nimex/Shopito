@@ -121,7 +121,7 @@ const generatePDFReport = () => {
       inventory.variations
         ?.map(
           (variation) =>
-            `${variation.variantName} (Qty: ${variation.quantity}, Price: $${variation.price})`
+            `${variation.variantName} (Qty: ${variation.quantity}, Price: LKR ${variation.price.toLocaleString()})`
         )
         .join(", ") || "N/A",
       inventory.productStatus,
@@ -214,7 +214,7 @@ const generateExcelReportWithStyles = () => {
     inventory.productDescription,
     inventory.attributes?.map((attr) => `${attr.key}`).join(", ") || "N/A",
     inventory.variations
-      ?.map((variation) => `${variation.variantName} (Qty: ${variation.quantity}, Price: $${variation.price})`)
+      ?.map((variation) => `${variation.variantName} (Qty: ${variation.quantity}, Price: LKR${variation.price.toLocaleString()})`)
       .join(", ") || "N/A",
     inventory.productStatus,
   ]);
@@ -294,7 +294,7 @@ const generateCSVReport = () => {
   showInventory.forEach((inventory) => {
     const attributes = inventory.attributes?.map((attr) => attr.key).join(", ") || "N/A";
     const variations = inventory.variations
-      ?.map((variation) => `${variation.variantName} (Qty: ${variation.quantity}, Price: $${variation.price})`)
+      ?.map((variation) => `${variation.variantName} (Qty: ${variation.quantity}, Price: LKR${variation.price.toLocaleString()})`)
       .join(", ") || "N/A";
     const row = [
       inventory.productID,
@@ -399,7 +399,7 @@ const generateCSVReport = () => {
                             <br />
                             Quantity: {variation.quantity}
                             <br />
-                            Price: ${variation.price}
+                            Price: LKR {variation.price.toLocaleString()}
                             <br />
                           </div>
                         ))

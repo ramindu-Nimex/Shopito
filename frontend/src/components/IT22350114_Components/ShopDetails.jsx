@@ -249,7 +249,7 @@ const ShopDetails = () => {
                           {/* Display the selected variation price */}
                           {selectedOptions[product.productID]?.selectedVariation && (
                             <p className="text-lg font-semibold mt-2">
-                              Price: LKR {selectedOptions[product.productID].selectedVariation.price}
+                              Price: LKR {selectedOptions[product.productID].selectedVariation.price.toLocaleString()}
                             </p>
                           )}
                         </div>

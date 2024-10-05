@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import React, { useState} from "react";
 import Header from "./components/Header";
 import HomePage from "./Pages/HomePage";
 import AboutUsPage from "./Pages/AboutUsPage";
@@ -14,18 +15,22 @@ import ProductForm from "./Pages/IT22003546_Pages/ProductCreate_01";
 import ShopList from "./components/IT22350114_Components/ShopUserView_02";
 import Inventory from "./components/IT22003546_Components/InventoryUserView_01";
 import ProductUpdate from "./Pages/IT22003546_Pages/ProductUpdate_01";
-
+import { CartProvider } from "./context/CartContext";
 import ShopCreate from "./Pages/IT22350114_Pages/ShopFormPage.jsx";
 import ShopListPage from "./components/IT22350114_Components/ShopList.jsx";
 import ShopsPage from "./components/IT22350114_Components/ShopsPage.jsx";
 import ShopDetails from "./components/IT22350114_Components/ShopDetails.jsx";
 import InventoryList_01 from "./components/IT22003546_Components/InventoryList_01.jsx";
+import Checkout from "./components/Checkout.jsx";
+import Cart from './components/cart'; 
 
 const App = () => {
+  const [showCart, setShowCart] = useState(false);
   return (
     <>
+    <CartProvider>
       <Router>
-        <Header />
+        <Header onCartToggle={() => setShowCart(!showCart)}/>
         <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -38,7 +43,7 @@ const App = () => {
             <Route path="/edit-shop/:shopId" element={<ShopCreate />} />
             <Route path="/shops" element={<ShopsPage />} />
             <Route path="/shops/:shopID" element={<ShopDetails />} /> {/* Add this */}
-
+            <Route path="/checkout" element={<Checkout />} /> 
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
@@ -50,6 +55,7 @@ const App = () => {
           </Routes>
         </div>
         <FooterComponent />
+        {showCart && <Cart />}
       </Router>
       <ToastContainer
         position="bottom-center"
@@ -63,6 +69,7 @@ const App = () => {
         pauseOnHover
         theme="dark"
       />
+    </CartProvider>  
     </>
   );
 };

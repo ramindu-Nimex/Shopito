@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaTh, FaBars, FaSortAlphaDown, FaSortAlphaUp } from "react-icons/fa"; // Import icons
+import { HiOutlineSortAscending, HiOutlineSortDescending } from "react-icons/hi"; // Import sorting icons
 import ShopListView from "./ShopListView"; // Import the ListView component
 
 const ShopsPage = () => {
@@ -11,7 +11,6 @@ const ShopsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // State to switch between grid and list view
   const [sortOrder, setSortOrder] = useState("asc"); // State for sort order
-  const [showSortOptions, setShowSortOptions] = useState(false); // Toggle for sort dropdown
 
   useEffect(() => {
     const fetchShops = async () => {
@@ -40,9 +39,8 @@ const ShopsPage = () => {
     setViewMode(mode);
   };
 
-  const handleSortChange = (order) => {
-    setSortOrder(order);
-    setShowSortOptions(false); // Close dropdown after selecting
+  const handleSortChange = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc")); // Toggle between ascending and descending
   };
 
   // Filter and sort shops
@@ -97,7 +95,6 @@ const ShopsPage = () => {
               className="p-3 border border-gray-300 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-600 transition duration-200 ease-in-out"
             >
               <option value="All">All Categories</option>
-              {/* More options based on your provided categories */}
               <option value="Clothing">Clothing</option>
               <option value="Electronics">Electronics</option>
               <option value="Groceries">Groceries</option>
@@ -113,31 +110,19 @@ const ShopsPage = () => {
             </select>
           </div>
 
-          {/* Sort Dropdown */}
+          {/* Sorting Dropdown with Icon */}
           <div className="relative">
             <button
-              onClick={() => setShowSortOptions(!showSortOptions)}
-              className="p-3 border border-gray-300 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-600 transition duration-200 ease-in-out flex items-center"
+              onClick={handleSortChange}
+              className="p-3 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition duration-200 ease-in-out"
             >
-              <FaSortAlphaDown className="mr-2" /> {/* Sort icon */}
-              Sort
+              {sortOrder === "asc" ? (
+                <HiOutlineSortAscending className="w-5 h-5 inline-block" />
+              ) : (
+                <HiOutlineSortDescending className="w-5 h-5 inline-block" />
+              )}
+              <span className="ml-2">Sort</span>
             </button>
-            {showSortOptions && (
-              <div className="absolute bg-white dark:bg-gray-800 border border-gray-300 rounded-lg shadow-lg mt-2 right-0 w-48">
-                <button
-                  onClick={() => handleSortChange("asc")}
-                  className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <FaSortAlphaDown className="mr-2" /> Alphabetical Ascending
-                </button>
-                <button
-                  onClick={() => handleSortChange("desc")}
-                  className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <FaSortAlphaUp className="mr-2" /> Alphabetical Descending
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Toggle View Buttons */}
@@ -148,7 +133,21 @@ const ShopsPage = () => {
                 viewMode === "grid" ? "bg-purple-600 text-white" : "bg-gray-200 dark:bg-gray-700"
               }`}
             >
-              <FaTh />
+              {/* Grid View Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h4M4 12h4M4 18h4M12 6h4M12 12h4M12 18h4M20 6h4M20 12h4M20 18h4"
+                />
+              </svg>
             </button>
             <button
               onClick={() => handleViewChange("list")}
@@ -156,7 +155,21 @@ const ShopsPage = () => {
                 viewMode === "list" ? "bg-purple-600 text-white" : "bg-gray-200 dark:bg-gray-700"
               }`}
             >
-              <FaBars />
+              {/* List View Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
             </button>
           </div>
         </div>

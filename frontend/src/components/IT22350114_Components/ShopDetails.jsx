@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card } from "flowbite-react";
-//import { useCart } from "../../context/CartContext";
+import { useCart } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 
 const ShopDetails = () => {
@@ -10,7 +10,7 @@ const ShopDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]); // State for products
-  ///const { addToCart } = useCart();
+  const { addToCart } = useCart();
   // const [selectedAttribute, setSelectedAttribute] = useState('');
   // const [selectedVariation, setSelectedVariation] = useState(null); // State to hold the selected variation
   // const [selectedPrice, setSelectedPrice] = useState(null); // New state for price
@@ -272,6 +272,12 @@ const ShopDetails = () => {
             )}
           </div>
         </div>
+
+
+
+
+
+
       </div>
     </div>
   );

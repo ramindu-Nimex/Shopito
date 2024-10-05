@@ -35,7 +35,7 @@ export const getInventory = async (req, res) => {
 //Get inventory Listing by ID
 export const getSingleInventory = async (req, res) => {
     const { Inventoryid } = req.params; // Change to match the desired parameter name
-    console.log("Received inventoryID:", Inventoryid); // Log the inventory ID
+    //console.log("Received inventoryID:", Inventoryid); // Log the inventory ID
 
     try {
         const inventoryListing = await Inventory.findById(Inventoryid); // Fetch by inventory ID

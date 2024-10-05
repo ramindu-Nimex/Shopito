@@ -37,7 +37,7 @@ const Cart = () => {
                     <div key={item.productID + item.selectedAttribute + item.variation} className="flex justify-between items-center border-b border-gray-200 py-2">
                         <div className="flex flex-col">
                             <h2 className="text-lg font-semibold">{item.productName}</h2>
-                            <p className="text-gray-600">Price: LKR {item.price * item.quantity}</p> {/* Display the total price */}
+                            <p className="text-gray-600">Price: LKR {(item.price * item.quantity).toLocaleString()}</p> {/* Display the total price */}
                             <p className="text-gray-600">Varient: {item.variation}</p> {/* Show the size */}
                             <p className="text-gray-600 flex items-center">
                                 Color: 

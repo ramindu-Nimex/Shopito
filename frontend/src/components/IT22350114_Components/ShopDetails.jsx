@@ -202,55 +202,70 @@ const ShopDetails = () => {
 
                 return (
                   <Card key={product.productID} className="flex flex-col items-center justify-center p-6 shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
-                    <img src={product.imageURLs.length > 0 ? product.imageURLs[0] : "placeholder.jpg"} alt={product.productName} className="w-32 h-32 object-cover mb-4 rounded-lg" />
+                    <img
+                      src={product.imageURLs.length > 0 ? product.imageURLs[0] : "placeholder.jpg"}
+                      alt={product.productName}
+                      className="w-32 h-32 object-cover mb-4 rounded-lg"
+                    />
                     <h3 className="text-lg font-semibold mb-2">{product.productName}</h3>
                     <p className="text-sm text-gray-600 mb-2">{product.productDescription}</p>
-                    <p className="text-sm text-green-600 mb-4">Status: {product.productStatus}</p>
-                    {/* <p className="text-lg font-semibold mb-2">ID: {product._id}</p> */}
-                    
-
-                    <div className="w-full mb-4">
-                      <h4 className="font-semibold mb-1">Select Color:</h4>
-                      <select className="border rounded p-2 w-full" onChange={handleAttributeChange} defaultValue="">
-                        <option value="" disabled>Select</option>
-                        {product.attributes.map((attr, index) => (
-                          <option key={index} value={attr.key}>
-                            {attr.key}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="w-full mb-4">
-                      <label htmlFor="variations" className="font-semibold mb-1">Select Variation:</label>
-                      <select id="variations" className="border rounded p-2 w-full" onChange={handleVariationChange}>
-                        <option value="">Select</option>
-                        {product.variations.map(variation => (
-                          <option key={variation.variantName} value={variation.variantName}>
-                            {variation.variantName}
-                          </option>
-                        ))}
-                      </select>
-                      {/* Display the selected variation price */}
-                      {selectedOptions[product.productID]?.selectedVariation && (
-                        <p className="text-lg font-semibold mt-2">
-                          Price: LKR {selectedOptions[product.productID].selectedVariation.price}
-                        </p>
-                      )}
-                      {selectedOptions[product.productID]?.selectedVariation && (
-                        <p className="text-lg font-semibold mt-2">
-                          Quantity: {selectedOptions[product.productID].selectedVariation.quantity}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="flex justify-center mt-4 w-full">
-                      <Button color="dark" onClick={() => handleAddToCart(product)} className="py-2 px-4 rounded-lg">
-                        Add to Cart
-                      </Button>
-                    </div>
+                    <p className={`text-sm mb-4 ${product.productStatus === 'Available' ? 'text-green-600' : 'text-red-600'}`}>
+                      Status: {product.productStatus}
+                    </p>
+                
+                    {/* Disable inputs and button if the product is out of stock */}
+                    {product.productStatus === 'Available' ? (
+                      <>
+                        <div className="w-full mb-4">
+                          <h4 className="font-semibold mb-1">Select Color:</h4>
+                          <select
+                            className="border rounded p-2 w-full"
+                            onChange={handleAttributeChange}
+                            defaultValue=""
+                          >
+                            <option value="" disabled>Select</option>
+                            {product.attributes.map((attr, index) => (
+                              <option key={index} value={attr.key}>
+                                {attr.key}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                
+                        <div className="w-full mb-4">
+                          <label htmlFor="variations" className="font-semibold mb-1">Select Variation:</label>
+                          <select
+                            id="variations"
+                            className="border rounded p-2 w-full"
+                            onChange={handleVariationChange}
+                          >
+                            <option value="">Select</option>
+                            {product.variations.map(variation => (
+                              <option key={variation.variantName} value={variation.variantName}>
+                                {variation.variantName}
+                              </option>
+                            ))}
+                          </select>
+                          {/* Display the selected variation price */}
+                          {selectedOptions[product.productID]?.selectedVariation && (
+                            <p className="text-lg font-semibold mt-2">
+                              Price: LKR {selectedOptions[product.productID].selectedVariation.price}
+                            </p>
+                          )}
+                        </div>
+                
+                        <div className="flex justify-center mt-4 w-full">
+                          <Button color="dark" onClick={() => handleAddToCart(product)} className="py-2 px-4 rounded-lg">
+                            Add to Cart
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-red-600 mt-4">This product is out of stock.</p>
+                    )}
                   </Card>
                 );
+                
               })
             ) : (
               <p className="text-center text-gray-500">No products available</p>

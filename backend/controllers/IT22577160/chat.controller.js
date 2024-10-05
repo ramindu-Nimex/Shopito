@@ -111,9 +111,10 @@ export const getFilteredProducts = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ _id: userId });
+    const pascelCaseProductName = toPascalCase(productName);
     const userData = [
       user.gender,
-      productName,
+      pascelCaseProductName,
       productCategory,
       "Alabama",
       Discount_Applied,
@@ -235,6 +236,15 @@ export const getFilteredProducts = async (req, res, next) => {
   }
 };
 
+const toPascalCase = (str) => {
+  return str
+    .split(/[\s_]+/) // Split by spaces or underscores
+    .map((word) =>
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() // Capitalize the first letter of each word
+    )
+  .join('');
+};
+
 // Function to run the Python script and get the output
 function predictCluster(userData, callback) {
   // Convert the userData array to string format
@@ -325,3 +335,4 @@ export const createShop = async (req, res, next) => {
     next(error);
   }
 };
+

@@ -256,6 +256,12 @@ const ShopCreate = () => {
               <option value="Groceries">Groceries</option>
               <option value="Home Decor">Home Decor</option>
               <option value="Books">Books</option>
+              <option value="Food&Beverages">Food & Beverages</option>
+              <option value="Beauty&Health">Beauty & Health</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Sports&Fitness">Sports & Fitness</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Services">Services</option>
               <option value="Other">Other</option>
             </select>
           </div>

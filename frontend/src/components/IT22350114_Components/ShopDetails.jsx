@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card } from "flowbite-react";
+//import { useCart } from "../../context/CartContext";
+import { Link } from "react-router-dom";
 
 const ShopDetails = () => {
   const { shopID } = useParams(); // Get the shop ID from the URL
@@ -8,6 +10,11 @@ const ShopDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]); // State for products
+  ///const { addToCart } = useCart();
+  // const [selectedAttribute, setSelectedAttribute] = useState('');
+  // const [selectedVariation, setSelectedVariation] = useState(null); // State to hold the selected variation
+  // const [selectedPrice, setSelectedPrice] = useState(null); // New state for price
+  const [selectedOptions, setSelectedOptions] = useState({});
 
   useEffect(() => {
     const fetchShopDetails = async () => {
@@ -63,17 +70,31 @@ const ShopDetails = () => {
   const images =
     shop.imageURLs && shop.imageURLs.length > 0 ? shop.imageURLs : [];
 
+
+    const handleAddToCart = (product) => {
+      const { selectedAttribute, selectedVariation } = selectedOptions[product.productID] || {};
+      if (!selectedAttribute || !selectedVariation) {
+        alert("Please select both a color and a variation before adding to cart.");
+        return;
+      }
+  
+      const itemToAdd = {
+        productID: product.productID,
+        productName: product.productName,
+        price: selectedVariation.price,
+        selectedAttribute,
+        quantity: 1,
+        variation: selectedVariation.variantName,
+        id: product._id,
+      };
+  
+      addToCart(itemToAdd);
+    };
+  
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6">
       {/* Cart Button */}
-      <div className="flex justify-end fixed top-30 right-10 z-50">
-        <button className="relative p-3 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-full hover:from-teal-400 hover:to-blue-500 focus:outline-none shadow-md shadow-gray-400 hover:shadow-lg hover:shadow-gray-500 transform hover:scale-105 transition-all duration-300">
-          <i className="fas fa-cart-shopping text-2xl"></i>
-          <span className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-            3
-          </span>
-        </button>
-      </div>
+      
 
       <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mt-4">
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">
@@ -152,46 +173,104 @@ const ShopDetails = () => {
         </div>
 
         {/* Render Products */}
-        <div className="p-4">
-            <h1 className="text-2xl font-semibold mb-6">Available Products</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {products.length > 0 ? (
-                    products.map((product) => (
-                        <Card key={product.productID} className="flex flex-col items-center justify-center p-4">
-                            <img
-                                src={product.imageURLs.length > 0 ? product.imageURLs[0] : "placeholder.jpg"}
-                                alt={product.productName}
-                                className="w-40 h-40 object-cover mb-4 rounded-lg"
-                            />
-                            <h3 className="text-lg font-semibold">{product.productName}</h3>
-                            <p className="text-sm text-gray-600 mb-2">{product.productDescription}</p>
-                            <p className="text-sm text-green-600">Status: {product.productStatus}</p>
+        <div className="p-6">
+          <h1 className="text-3xl font-semibold mb-8 text-center">Available Products</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.length > 0 ? (
+              products.map((product) => {
+                const handleAttributeChange = (e) => {
+                  const newAttribute = e.target.value;
+                  setSelectedOptions(prev => ({
+                    ...prev,
+                    [product.productID]: {
+                      ...prev[product.productID],
+                      selectedAttribute: newAttribute,
+                    },
+                  }));
+                };
 
-                            {/* Display variations */}
-                            <div className="mt-4">
-                                <h4 className="font-semibold">Variations:</h4>
-                                {product.variations && product.variations.length > 0 ? (
-                                    product.variations.map((variation, index) => (
-                                        <div key={index} className="border p-2 my-2 rounded-md">
-                                            <p className="text-sm">Variant: {variation.variantName}</p>
-                                            <p className="text-sm">Quantity: {variation.quantity}</p>
-                                            <p className="text-sm">Price: ${variation.price}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No variations available</p>
-                                )}
-                            </div>
+                const handleVariationChange = (e) => {
+                  const selectedVariant = product.variations.find(variation => variation.variantName === e.target.value);
+                  setSelectedOptions(prev => ({
+                    ...prev,
+                    [product.productID]: {
+                      ...prev[product.productID],
+                      selectedVariation: selectedVariant,
+                    },
+                  }));
+                };
 
-                            <div className="flex justify-center space-x-2 mt-4 w-full">
-                              <Button color="dark">Add to Cart</Button>
-                          </div>
-                        </Card>
-                    ))
-                ) : (
-                    <p>No products available</p>
-                )}
-            </div>
+                return (
+                  <Card key={product.productID} className="flex flex-col items-center justify-center p-6 shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
+                    <img
+                      src={product.imageURLs.length > 0 ? product.imageURLs[0] : "placeholder.jpg"}
+                      alt={product.productName}
+                      className="w-32 h-32 object-cover mb-4 rounded-lg"
+                    />
+                    <h3 className="text-lg font-semibold mb-2">{product.productName}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{product.productDescription}</p>
+                    <p className={`text-sm mb-4 ${product.productStatus === 'Available' ? 'text-green-600' : 'text-red-600'}`}>
+                      Status: {product.productStatus}
+                    </p>
+                
+                    {/* Disable inputs and button if the product is out of stock */}
+                    {product.productStatus === 'Available' ? (
+                      <>
+                        <div className="w-full mb-4">
+                          <h4 className="font-semibold mb-1">Select Color:</h4>
+                          <select
+                            className="border rounded p-2 w-full"
+                            onChange={handleAttributeChange}
+                            defaultValue=""
+                          >
+                            <option value="" disabled>Select</option>
+                            {product.attributes.map((attr, index) => (
+                              <option key={index} value={attr.key}>
+                                {attr.key}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                
+                        <div className="w-full mb-4">
+                          <label htmlFor="variations" className="font-semibold mb-1">Select Variation:</label>
+                          <select
+                            id="variations"
+                            className="border rounded p-2 w-full"
+                            onChange={handleVariationChange}
+                          >
+                            <option value="">Select</option>
+                            {product.variations.map(variation => (
+                              <option key={variation.variantName} value={variation.variantName}>
+                                {variation.variantName}
+                              </option>
+                            ))}
+                          </select>
+                          {/* Display the selected variation price */}
+                          {selectedOptions[product.productID]?.selectedVariation && (
+                            <p className="text-lg font-semibold mt-2">
+                              Price: LKR {selectedOptions[product.productID].selectedVariation.price}
+                            </p>
+                          )}
+                        </div>
+                
+                        <div className="flex justify-center mt-4 w-full">
+                          <Button color="dark" onClick={() => handleAddToCart(product)} className="py-2 px-4 rounded-lg">
+                            Add to Cart
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-red-600 mt-4">This product is out of stock.</p>
+                    )}
+                  </Card>
+                );
+                
+              })
+            ) : (
+              <p className="text-center text-gray-500">No products available</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

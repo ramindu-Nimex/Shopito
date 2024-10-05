@@ -28,7 +28,18 @@ const ShopList = () => {
       if (data.success === false || !Array.isArray(data)) {
         setError(true);
       } else {
-        setShopListing(data);
+        // Filter shops based on user roles
+        if (currentUser.isInventoryAdmin) {
+          // Show all shops if the user has inventory or outlet admin privileges
+          setShopListing(data);
+        } else if (currentUser.isAdmin) {
+          // Show only shops created by the admin user
+          const userShops = data.filter(shop => shop.ownerID === currentUser.username);
+          setShopListing(userShops);
+        } else {
+          // If the user is not an admin, show no shops or handle accordingly
+          setShopListing([]);
+        }
       }
     } catch (error) {
       setError(true);
@@ -36,13 +47,6 @@ const ShopList = () => {
       setLoading(false);
     }
   };
-
-  // Fetch all shop listings when the component mounts or updates
-  useEffect(() => {
-    if (currentUser?._id) {
-      fetchShopListings();
-    }
-  }, [currentUser._id]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -55,9 +59,8 @@ const ShopList = () => {
   const handleShopDelete = async (_id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this shop?");
     if (!confirmDelete) {
-      return; // Stop further execution if user clicks 'Cancel'
+      return;
     }
-    
     try {
       const res = await fetch(`/api/shopListings/delete/${_id}`, {
         method: "DELETE",
@@ -67,22 +70,18 @@ const ShopList = () => {
         console.log(data.message);
         return;
       }
-      
-      await fetchShopListings(); // Refetch the shop listings after successful deletion
+      await fetchShopListings();
     } catch (error) {
       console.log(error.message);
     }
   };
-  
 
   const generatePDFReport = () => {
-    const doc = new jsPDF("landscape"); // Use landscape mode for wider tables
+    const doc = new jsPDF("landscape");
 
-    // Title
     doc.setFontSize(18);
     doc.text("Shop Listings Report", 14, 22);
 
-    // Define the table columns and data
     const tableColumn = [
       "Shop Name",
       "Location",
@@ -93,26 +92,23 @@ const ShopList = () => {
       "Status",
     ];
 
-    // Mapping your shop data into a table row format
     const tableRows = shopListing.map((shop) => [
       shop.shopName,
       shop.shopLocation,
       shop.shopOpeningHours,
-      shop.shopPhone || "N/A", // Handle missing data with "N/A"
+      shop.shopPhone || "N/A",
       shop.shopEmail || "N/A",
       shop.shopCategory,
-      shop.isOpen ? "Open" : "Closed", // Handle status
+      shop.isOpen ? "Open" : "Closed",
     ]);
 
-    // Adding the table to the PDF
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
-      startY: 30, // Position the table below the title
-      theme: "grid", // You can use 'grid', 'striped', or 'plain'
+      startY: 30,
+      theme: "grid",
     });
 
-    // Save the PDF
     doc.save("shop-listings-report.pdf");
   };
 
@@ -158,64 +154,33 @@ const ShopList = () => {
       <h1 className="text-center mt-7 font-extrabold text-4xl text-gray-800 dark:text-white underline mb-10">
         Shop Listings
       </h1>
-
+      
       {currentUser?.isAdmin && (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg table-auto">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Shop ID
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Shop Name
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Images
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Location
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Description
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Category
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Phone
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Email
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Website
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Opening Hours
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">
-                  Actions
-                </th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Shop ID</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Shop Name</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Images</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Location</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Description</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Category</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Phone</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Email</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Website</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Opening Hours</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Status</th>
+                <th className="px-4 py-3 text-left text-gray-600 dark:text-gray-200">Actions</th>
               </tr>
             </thead>
-
+            
             {shopListing.length > 0 ? (
               shopListing.map((shop) => (
-                <tbody
-                  key={shop._id}
-                  className="divide-y divide-gray-200 dark:divide-gray-700"
-                >
+                <tbody key={shop._id} className="divide-y divide-gray-200 dark:divide-gray-700">
                   <tr className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopID}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopName}
-                    </td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopID}</td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopName}</td>
                     <td className="px-4 py-3">
                       {shop.imageURLs && shop.imageURLs.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
@@ -229,26 +194,14 @@ const ShopList = () => {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-gray-500 dark:text-gray-400">
-                          No Images
-                        </span>
+                        <span className="text-gray-500 dark:text-gray-400">No Images</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopLocation}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopDescription}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopCategory}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopPhone}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopEmail}
-                    </td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopLocation}</td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopDescription}</td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopCategory}</td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopPhone}</td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopEmail}</td>
                     <td className="px-4 py-3 text-blue-600 dark:text-blue-400">
                       <a
                         href={shop.shopWebsite}
@@ -259,18 +212,12 @@ const ShopList = () => {
                         {shop.shopWebsite}
                       </a>
                     </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                      {shop.shopOpeningHours}
-                    </td>
+                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{shop.shopOpeningHours}</td>
                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                       {shop.isOpen ? (
-                        <span className="text-green-500 font-semibold">
-                          Open
-                        </span>
+                        <span className="text-green-500 font-semibold">Open</span>
                       ) : (
-                        <span className="text-red-500 font-semibold">
-                          Closed
-                        </span>
+                        <span className="text-red-500 font-semibold">Closed</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -301,10 +248,7 @@ const ShopList = () => {
             ) : (
               <tbody>
                 <tr>
-                  <td
-                    colSpan="12"
-                    className="px-4 py-3 text-center text-gray-500 dark:text-gray-300"
-                  >
+                  <td colSpan="12" className="px-4 py-3 text-center text-gray-500 dark:text-gray-300">
                     No shop listings found.
                   </td>
                 </tr>
@@ -322,26 +266,18 @@ const ShopList = () => {
           </Link>
         </Button>
       </div>
+  
       {/* Report Generation Buttons */}
       <div className="mt-8 flex justify-between">
-        <Button
-          onClick={generatePDFReport}
-          className="text-white bg-blue-500 hover:bg-blue-600"
-        >
+        <Button onClick={generatePDFReport} className="text-white bg-blue-500 hover:bg-blue-600">
           Generate PDF Report
         </Button>
 
-        <Button
-          onClick={generateCSVReport}
-          className="text-white bg-green-500 hover:bg-green-600"
-        >
+        <Button onClick={generateCSVReport} className="text-white bg-green-500 hover:bg-green-600">
           Generate CSV Report
         </Button>
 
-        <Button
-          onClick={generateExcelReport}
-          className="text-white bg-teal-500 hover:bg-teal-600"
-        >
+        <Button onClick={generateExcelReport} className="text-white bg-teal-500 hover:bg-teal-600">
           Generate Excel Report
         </Button>
       </div>

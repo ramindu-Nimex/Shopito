@@ -109,6 +109,7 @@ const ShopCreate = () => {
       }
     }
   
+    
     setFormData((prevState) => ({
       ...prevState,
       [name]: processedValue,

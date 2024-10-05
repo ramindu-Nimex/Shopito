@@ -114,7 +114,7 @@ const ShopsPage = () => {
           <div className="relative">
             <button
               onClick={handleSortChange}
-              className="p-3 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition duration-200 ease-in-out"
+              className="p-3 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-purple-600 hover:text-white transition duration-200 ease-in-out"
             >
               {sortOrder === "asc" ? (
                 <HiOutlineSortAscending className="w-5 h-5 inline-block" />

@@ -73,18 +73,49 @@ const ShopCreate = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+  
     let processedValue = value;
     if (type === "checkbox") {
       processedValue = checked;
     }
-
+  
+    // Real-time validations
+    if (name === "shopPhone") {
+      // Only allow numeric input
+      if (!/^\d*$/.test(value)) return; // Prevent non-numeric characters
+    }
+  
+    if (name === "shopName" || name === "shopDescription") {
+      // Limit the length of certain text fields
+      const maxLength = name === "shopName" ? 50 : 200;
+      if (value.length > maxLength) return; // Prevent typing beyond limit
+    }
+  
+    if (name === "shopEmail") {
+      // Email validation (basic pattern)
+      if (value && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
+        setError("Invalid email format");
+      } else {
+        setError(null);
+      }
+    }
+  
+    if (name === "shopWebsite") {
+      // Website URL validation
+      if (value && !/^(https?:\/\/)?([\w\d\-_]+\.+[A-Za-z]{2,})+\/?/.test(value)) {
+        setError("Invalid website URL");
+      } else {
+        setError(null);
+      }
+    }
+  
+    
     setFormData((prevState) => ({
       ...prevState,
       [name]: processedValue,
     }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -256,6 +287,12 @@ const ShopCreate = () => {
               <option value="Groceries">Groceries</option>
               <option value="Home Decor">Home Decor</option>
               <option value="Books">Books</option>
+              <option value="Food&Beverages">Food & Beverages</option>
+              <option value="Beauty&Health">Beauty & Health</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Sports&Fitness">Sports & Fitness</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Services">Services</option>
               <option value="Other">Other</option>
             </select>
           </div>
@@ -358,7 +395,7 @@ const ShopCreate = () => {
             gradientDuoTone="purpleToBlue"
             className="uppercase"
           >
-            {loading ? "Creating Shop..." : "Create Shop"}
+            { shopId ? "Update a Shop Listing" : "Create a Shop Listing"}
           </Button>
           {error && (
             <Alert className="mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce">

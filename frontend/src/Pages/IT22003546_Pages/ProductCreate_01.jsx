@@ -32,7 +32,7 @@ const ProductForm = () => {
         productDescription: '',
         attributes: [], 
         variations: [],
-        productStatus: 'Availble',
+        productStatus: 'Available',
         imageURLs: [],
     });
     

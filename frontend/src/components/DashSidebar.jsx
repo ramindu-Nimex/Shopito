@@ -52,31 +52,20 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
 
-{currentUser.isAdmin && (    
-  <>
-    {/* <Link to="/dashboard?tab=inventory">
-      <Sidebar.Item
-        active={tab === "inventory"}
-        icon={HiUser}
-        label="Inventory"
-        labelColor="dark"
-        as="div"
-      >
-        Inventory
-      </Sidebar.Item>
-    </Link> */}
-    <Link to="/dashboard?tab=shop-list">
-      <Sidebar.Item
-        active={tab === "shop-list"}
-        icon={HiOutlineClipboardList}
-        as="div"
-      >
-        Shop List
-      </Sidebar.Item>
-    </Link>
+          {currentUser.isAdmin && (    
+            <>
+              <Link to="/dashboard?tab=shop-list">
+                <Sidebar.Item
+                  active={tab === "shop-list"}
+                  icon={HiOutlineClipboardList}
+                  as="div"
+                >
+                  Shop List
+                </Sidebar.Item>
+              </Link>
 
-  </>
-)}
+            </>
+          )}
 
 
 

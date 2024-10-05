@@ -89,8 +89,10 @@ const ShopCreate = () => {
     setLoading(true);
 
     try {
-      if (formData.imageURLs.length < 1)
-        return setError("You must upload at least one image");
+      if (formData.imageURLs.length < 1) return setError("You must upload at least one image");
+      //if (formData.amenityID === currentUser.amenityID) return setError('Shop ID already exists');
+            setLoading(true);
+            setError(false);
 
       console.log("Submitting image URLs:", formData.imageURLs);
 

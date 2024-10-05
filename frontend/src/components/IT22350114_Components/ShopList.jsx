@@ -53,11 +53,11 @@ const ShopList = () => {
   }
 
   const handleShopDelete = async (_id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this shop?"
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this shop?");
     if (!confirmDelete) {
+      return; // Stop further execution if user clicks 'Cancel'
     }
+    
     try {
       const res = await fetch(`/api/shopListings/delete/${_id}`, {
         method: "DELETE",
@@ -67,12 +67,13 @@ const ShopList = () => {
         console.log(data.message);
         return;
       }
-      //setShowShops((prev) => prev.filter((shop) => shop._id !== _id));
-      await fetchShopListings();
+      
+      await fetchShopListings(); // Refetch the shop listings after successful deletion
     } catch (error) {
       console.log(error.message);
     }
   };
+  
 
   const generatePDFReport = () => {
     const doc = new jsPDF("landscape"); // Use landscape mode for wider tables

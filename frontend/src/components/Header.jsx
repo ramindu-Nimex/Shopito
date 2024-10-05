@@ -8,6 +8,8 @@ import { signOutSuccess } from "../redux/user/userSlice";
 import { useCart } from "../context/CartContext"; // Adjust the path as needed
 import Cart from "./cart"; // Import the Cart component
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   const path = useLocation().pathname;
@@ -93,11 +95,11 @@ const Header = () => {
             </Link>
 
           )}
-          <Button onClick={() => setShowCart(!showCart)} className="relative">
-            Cart
-            <span className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-              {cart.length} {/* Display the number of items in the cart */}
-            </span>
+          <Button onClick={() => setShowCart(!showCart)} className="relative flex items-center p-0">
+              <FontAwesomeIcon icon={faShoppingCart} className="w-5 h-5" />
+              <span className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                  {cart.length}
+              </span>
           </Button>
           <Navbar.Toggle className="text-sm" />
         </div>

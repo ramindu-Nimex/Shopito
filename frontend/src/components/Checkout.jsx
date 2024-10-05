@@ -28,7 +28,7 @@ const Checkout = () => {
                     {cart.map(item => (
                         <div key={item.productID + item.selectedAttribute} className="flex justify-between mb-2 items-center">
                         <span className="flex-1 text-left">{item.productName}</span>
-                        <span className="flex-1 text-center">LKR {item.price}</span>
+                        <span className="flex-1 text-center">LKR {item.price.toLocaleString()}</span>
                         <span className="flex-none text-right">x{item.quantity}</span>
                         
                     </div>
@@ -36,7 +36,7 @@ const Checkout = () => {
                     <div className="border-t border-gray-300 mt-4 pt-4">
                         <h2 className="text-lg font-semibold">Total:</h2>
                         <span className="text-xl font-bold">
-                            LKR {cart.reduce((total, item) => total + item.price * item.quantity, 0)}
+                            LKR {cart.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString()}
                         </span>
                     </div>
                 </div>

@@ -46,7 +46,7 @@ export default function HomePage() {
             className="w-[250px] rounded-tl-2xl rounded-br-2xl"
             gradientDuoTone="purpleToPink"
           >
-            <Link  className="transition duration-100 ease-in-out">
+            <Link to="/shops" className="transition duration-100 ease-in-out">
               Get Started
             </Link>
           </Button>

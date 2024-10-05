@@ -26,7 +26,7 @@ export default function NewPrompt({ data }) {
       },
       {
         role: "model",
-        parts: [{ text: "Great to meet you. what would like to know?" }],
+        parts: [{ text: "Any good deals or discounts brand recommendations within my budget? Sunglasses Accesssories Child Items Places to eat" }],
       }
     ],
     generationConfig: {

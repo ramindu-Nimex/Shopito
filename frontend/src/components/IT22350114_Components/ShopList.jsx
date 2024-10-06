@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { Table, Button, TextInput } from "flowbite-react";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
-import "jspdf-autotable";
+
 
 const ShopList = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -75,14 +76,17 @@ const ShopList = () => {
       console.log(error.message);
     }
   };
-
   const generatePDFReport = () => {
     const doc = new jsPDF("landscape");
-
-    doc.setFontSize(18);
+  
+    // Set title styles
+    doc.setFontSize(20);
+    doc.setTextColor("#3B82F6"); // Blue shade for title
     doc.text("Shop Listings Report", 14, 22);
-
+  
+    // Define column headers and table rows
     const tableColumn = [
+      "Shop ID",
       "Shop Name",
       "Location",
       "Opening Hours",
@@ -91,8 +95,9 @@ const ShopList = () => {
       "Category",
       "Status",
     ];
-
+  
     const tableRows = shopListing.map((shop) => [
+      shop.shopID,
       shop.shopName,
       shop.shopLocation,
       shop.shopOpeningHours,
@@ -101,26 +106,63 @@ const ShopList = () => {
       shop.shopCategory,
       shop.isOpen ? "Open" : "Closed",
     ]);
-
+  
+    // Add table with custom styles
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
       startY: 30,
       theme: "grid",
+      styles: {
+        fillColor: [245, 245, 245], // Light grey for rows
+        textColor: "#1E3A8A", // Darker blue for text
+        fontSize: 12,
+      },
+      headStyles: {
+        fillColor: [33, 150, 243], // Blue for headers
+        textColor: "#FFFFFF", // White text
+        fontSize: 14,
+        halign: 'center', // Center align headers
+        valign: 'middle',
+      },
+      alternateRowStyles: {
+        fillColor: [220, 230, 255], // Very light blue for alternate rows
+      },
+      margin: { top: 30 },
+      tableLineWidth: 0.5,
+      tableLineColor: "#3B82F6", // Light blue table borders
+      columnStyles: {
+        0: { halign: 'center' }, // Align Shop ID center
+        1: { halign: 'left' }, // Align Shop Name left
+        2: { halign: 'left' }, // Align Location left
+        3: { halign: 'center' }, // Align Opening Hours center
+        4: { halign: 'center' }, // Align Phone center
+        5: { halign: 'left' }, // Align Email left
+        6: { halign: 'left' }, // Align Category left
+        7: { halign: 'center' }, // Align Status center
+      },
     });
-
+  
+    // Add footer with page number
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.setTextColor(128);
+      doc.text(`Page ${i} of ${pageCount}`, 14, doc.internal.pageSize.height - 10);
+    }
+  
     doc.save("shop-listings-report.pdf");
   };
 
   const generateCSVReport = () => {
     const csvData = shopListing.map((shop) => ({
-      "Shop ID": shop.shopID,
       "Shop Name": shop.shopName,
       Location: shop.shopLocation,
       Category: shop.shopCategory,
       Status: shop.isOpen ? "Open" : "Closed",
     }));
-
+  
     const csv = Papa.unparse(csvData);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -132,20 +174,90 @@ const ShopList = () => {
     link.click();
     document.body.removeChild(link);
   };
-
   const generateExcelReport = () => {
+    // Map the shop data with all required fields
     const ws = XLSX.utils.json_to_sheet(
       shopListing.map((shop) => ({
         "Shop ID": shop.shopID,
         "Shop Name": shop.shopName,
         Location: shop.shopLocation,
+        Description: shop.shopDescription,
         Category: shop.shopCategory,
+        "Phone Number": shop.shopPhone || "N/A",
+        Email: shop.shopEmail || "N/A",
+        Website: shop.shopWebsite || "N/A",
+        "Opening Hours": shop.shopOpeningHours,
         Status: shop.isOpen ? "Open" : "Closed",
       }))
     );
-
+  
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Shop Listings");
+  
+    // Define header styles
+    const headerCellStyle = {
+      font: { bold: true, color: { rgb: "FFFFFF" } }, // White text
+      fill: { fgColor: { rgb: "1E40AF" } }, // Dark blue background
+      alignment: { horizontal: "center", vertical: "center" }, // Centered text
+    };
+  
+    // Define data row styles
+    const dataRowStyle = {
+      fill: { fgColor: { rgb: "E0F2FE" } }, // Light blue background for data rows
+      alignment: { horizontal: "left", vertical: "center" },
+    };
+  
+    // Define alternate row styles
+    const alternateRowStyle = {
+      fill: { fgColor: { rgb: "ECFDF5" } }, // Light green background for alternate rows
+      alignment: { horizontal: "left", vertical: "center" },
+    };
+  
+    // Define status-specific styles
+    const statusStyles = {
+      Open: { font: { color: { rgb: "22C55E" } }, fill: { fgColor: { rgb: "D1FAE5" } } }, // Green for open status
+      Closed: { font: { color: { rgb: "EF4444" } }, fill: { fgColor: { rgb: "FEE2E2" } } }, // Red for closed status
+    };
+  
+    // Apply header styles to all headers
+    const headerRange = XLSX.utils.decode_range(ws["!ref"]);
+    for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRange.s.r, c: C });
+      if (!ws[cellAddress]) continue;
+      ws[cellAddress].s = headerCellStyle;
+    }
+  
+    // Apply styles to each data row based on status
+    for (let R = headerRange.s.r + 1; R <= headerRange.e.r; ++R) {
+      const rowStatus = ws[XLSX.utils.encode_cell({ r: R, c: 9 })]?.v; // Get the status from column index 9 (Status)
+      for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!ws[cellAddress]) continue;
+        // Apply data row style or alternate row style
+        ws[cellAddress].s = R % 2 === 0 ? dataRowStyle : alternateRowStyle;
+  
+        // Override with status-specific style if applicable
+        if (C === 9 && statusStyles[rowStatus]) {
+          ws[cellAddress].s = statusStyles[rowStatus];
+        }
+      }
+    }
+  
+    // Set column widths for better readability
+    const colWidths = [
+      { wch: 15 }, // Shop ID
+      { wch: 25 }, // Shop Name
+      { wch: 20 }, // Location
+      { wch: 30 }, // Description
+      { wch: 15 }, // Category
+      { wch: 20 }, // Phone Number
+      { wch: 25 }, // Email
+      { wch: 30 }, // Website
+      { wch: 15 }, // Opening Hours
+      { wch: 10 }, // Status
+    ];
+    ws["!cols"] = colWidths;
+  
     XLSX.writeFile(wb, "shop-listings-report.xlsx");
   };
 

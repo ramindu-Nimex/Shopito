@@ -73,24 +73,28 @@ const ShopCreate = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     let processedValue = value;
     if (type === "checkbox") {
       processedValue = checked;
     }
-  
+
     // Real-time validations
-    if (name === "shopPhone") {
-      // Only allow numeric input
-      if (!/^\d*$/.test(value)) return; // Prevent non-numeric characters
+  if (name === "shopPhone") {
+    if (!/^\d{0,10}$/.test(value)) return; // Allow only numbers and limit to 10 digits
+    if (value.length !== 10 && value.length > 0) {
+      setError("Phone number must be exactly 10 digits");
+    } else {
+      setError(null);
     }
-  
+  }
+
     if (name === "shopName" || name === "shopDescription") {
       // Limit the length of certain text fields
       const maxLength = name === "shopName" ? 50 : 200;
       if (value.length > maxLength) return; // Prevent typing beyond limit
     }
-  
+
     if (name === "shopEmail") {
       // Email validation (basic pattern)
       if (value && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
@@ -99,17 +103,19 @@ const ShopCreate = () => {
         setError(null);
       }
     }
-  
+
     if (name === "shopWebsite") {
       // Website URL validation
-      if (value && !/^(https?:\/\/)?([\w\d\-_]+\.+[A-Za-z]{2,})+\/?/.test(value)) {
+      if (
+        value &&
+        !/^(https?:\/\/)?([\w\d\-_]+\.+[A-Za-z]{2,})+\/?/.test(value)
+      ) {
         setError("Invalid website URL");
       } else {
         setError(null);
       }
     }
-  
-    
+
     setFormData((prevState) => ({
       ...prevState,
       [name]: processedValue,
@@ -118,6 +124,7 @@ const ShopCreate = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.shopID === currentUser.shopID) return setError('ShopID already exists');
     setLoading(true);
 
     try {
@@ -151,6 +158,7 @@ const ShopCreate = () => {
       setLoading(false);
     }
   };
+  
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
       setUploading(true);
@@ -229,6 +237,7 @@ const ShopCreate = () => {
               value={formData.ownerID}
               onChange={handleChange}
               required
+              readOnly
             />
           </div>
           <div>
@@ -239,6 +248,7 @@ const ShopCreate = () => {
               value={formData.shopID}
               onChange={handleChange}
               required
+              readOnly
             />
           </div>
           <div>
@@ -304,6 +314,7 @@ const ShopCreate = () => {
               name="shopPhone"
               value={formData.shopPhone}
               onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -313,6 +324,7 @@ const ShopCreate = () => {
               name="shopEmail"
               value={formData.shopEmail}
               onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -331,6 +343,7 @@ const ShopCreate = () => {
               name="shopOpeningHours"
               value={formData.shopOpeningHours}
               onChange={handleChange}
+              required
             />
           </div>
           <div>

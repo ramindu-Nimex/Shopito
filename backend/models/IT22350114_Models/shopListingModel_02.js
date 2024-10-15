@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const shopListingSchema = new mongoose.Schema(
   {
+    ownerID: {
+      type: String,
+      required: true,
+    },
     shopID: {
       type: String,
       required: true,

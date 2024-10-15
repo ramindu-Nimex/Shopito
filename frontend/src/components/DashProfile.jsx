@@ -20,7 +20,7 @@ import {
   signOutSuccess
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle, HiShoppingBag } from "react-icons/hi";
 import { GrResources } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
@@ -245,10 +245,15 @@ export default function DashProfile() {
         currentUser.isShoppingOrderAdmin && (
           <>
             <Link to={'/ShopitoMart'}>
-              <Button type='submit' gradientDuoTone="pinkToOrange" className='flex flex-col gap-4 w-full uppercase my-4'>
-                <GrResources className='mr-2 text-3xl bg-red-300 rounded-full p-1 border-2' />Manage Order 
-              </Button>
-            </Link>
+  <Button 
+    type='submit'  
+    className='flex items-center justify-center gap-4 w-full uppercase my-4 bg-gradient-to-r from-purple-500 to-rose-500 text-white hover:from-purple-700 hover:to-rose-600'
+  >
+    <HiShoppingBag className='text-3xl bg-red-300 rounded-full p-1 border-2' />
+    <span className='flex-1 text-center'>Manage Order</span>
+  </Button>
+</Link>
+
           </>
         )
       }

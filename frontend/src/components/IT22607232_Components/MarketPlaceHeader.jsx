@@ -6,11 +6,10 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { CgGames } from "react-icons/cg";
-import { AiOutlineStar } from "react-icons/ai";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import WishListPopUp from "./WishListPopUp";
 import CartPopUp from "./CartPopUp";
+import { HiStar } from "react-icons/hi";
 
 export default function MarketPlaceHeader() {
   const { cart } = useSelector((state) => state.cart);
@@ -18,17 +17,36 @@ export default function MarketPlaceHeader() {
   const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/searchResource?${searchQuery}`);
+  };
+
   return (
     <Navbar className="border-b-2 sticky top-16 bg-[#3321c8] dark:bg-slate-600 z-40 flex justify-between">
-      <Link to="/games">
+      <Link to="/reserve">
         <Button
           color="dark"
           className="sm:flex items-center relative w-[200px] h-14 sm:w-[270px] hidden"
         >
           <span>
-            <CgGames className="mr-2" size={25} />
+            <HiStar className="mr-2" size={25} />
           </span>{" "}
-          Let's Play Games
+          Reserved shopitos
         </Button>
       </Link>
       <div className="flex items-center">
@@ -50,27 +68,19 @@ export default function MarketPlaceHeader() {
             {cart && cart.length}
           </span>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             type="text"
             placeholder="Search..."
             rightIcon={AiOutlineSearch}
-            // value={searchTerm}
-            // onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
         {/* cart popup */}
-        {
-               openCart && (
-                  <CartPopUp setOpenCart={setOpenCart} />
-               )
-            }
-            {/* wishlist popup */}
-            {
-               openWishlist && (
-                  <WishListPopUp setOpenWishlist={setOpenWishlist} />
-               )
-            }
+        {openCart && <CartPopUp setOpenCart={setOpenCart} />}
+        {/* wishlist popup */}
+        {openWishlist && <WishListPopUp setOpenWishlist={setOpenWishlist} />}
       </div>
     </Navbar>
   );

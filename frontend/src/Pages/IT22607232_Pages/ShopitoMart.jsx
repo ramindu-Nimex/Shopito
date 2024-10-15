@@ -113,12 +113,12 @@ const handleSubmit = async (e) => {
             <TextInput type="text" onChange={handleChange}  value={formData.title} placeholder="Title" required id="title" className="flex-1"/>
             <Select className="" onChange={(e) => setFormData({...formData, category: e.target.value})}>
                <option value="Uncategorized">Select a Category</option>
-               <option value="Refrigerator">Clothing</option>
-               <option value="Heaters">Accessories</option>
-               <option value="MicroWave">Electronic</option>
-               <option value="Speakers">Child Items</option>
-               <option value="Washing Machine">Food</option>
-               <option value="DiningTable">Foot Wear</option>
+               <option value="Clothing">Clothing</option>
+               <option value="Accessories">Accessories</option>
+               <option value="Electronic">Electronic</option>
+               <option value="Child Items">Child Items</option>
+               <option value="Food">Food</option>
+               <option value="Foot Wear">Foot Wear</option>
             </Select>
          </div>
          <TextInput type="text" onChange={handleChange}  value={formData.shop} placeholder="Shop" required id="shop" />

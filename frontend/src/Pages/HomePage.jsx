@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom'
 export default function HomePage() {
   const [text] = useTypewriter({
     words: [
-      "seamless environments.",
-      "secure surroundings.",
-      "a symbol of reliability.",
-      "elevated spaces of distinction.",
+      "convenient shopping experiences.",
+      "luxury at every corner.",
+      "your shopping destination.",
+      "unmatched variety and convenience."
     ],
     loop: true,
     typeSpeed: 60,
@@ -46,7 +46,7 @@ export default function HomePage() {
             className="w-[250px] rounded-tl-2xl rounded-br-2xl"
             gradientDuoTone="purpleToPink"
           >
-            <Link  className="transition duration-100 ease-in-out">
+            <Link to="/shops" className="transition duration-100 ease-in-out">
               Get Started
             </Link>
           </Button>

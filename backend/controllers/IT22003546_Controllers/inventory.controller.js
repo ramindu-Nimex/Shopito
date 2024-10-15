@@ -13,7 +13,7 @@ export const createInventory = async (req, res) => {
 
 export const getInventoryByShopID = async (req, res) => {
     const { shopid } = req.params; // Get shopID from query parameters
-    console.log("Received shopID:", shopid);
+    //console.log("Received shopID:", shopid);
     try {
         const inventory = await Inventory.find({ shopID: shopid }); // Filter by shopID
         res.status(200).json(inventory);
@@ -35,7 +35,7 @@ export const getInventory = async (req, res) => {
 //Get inventory Listing by ID
 export const getSingleInventory = async (req, res) => {
     const { Inventoryid } = req.params; // Change to match the desired parameter name
-    console.log("Received inventoryID:", Inventoryid); // Log the inventory ID
+    //console.log("Received inventoryID:", Inventoryid); // Log the inventory ID
 
     try {
         const inventoryListing = await Inventory.findById(Inventoryid); // Fetch by inventory ID

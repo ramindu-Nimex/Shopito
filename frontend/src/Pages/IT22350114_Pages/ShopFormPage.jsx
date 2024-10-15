@@ -16,6 +16,7 @@ const ShopCreate = () => {
   const { shopId } = useParams(); // Get the shop ID from the URL
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
+    ownerID: currentUser.username,
     shopID: generateServiceId(),
     shopName: "",
     shopLocation: "",
@@ -78,14 +79,52 @@ const ShopCreate = () => {
       processedValue = checked;
     }
 
+    // Real-time validations
+  if (name === "shopPhone") {
+    if (!/^\d{0,10}$/.test(value)) return; // Allow only numbers and limit to 10 digits
+    if (value.length !== 10 && value.length > 0) {
+      setError("Phone number must be exactly 10 digits");
+    } else {
+      setError(null);
+    }
+  }
+
+    if (name === "shopName" || name === "shopDescription") {
+      // Limit the length of certain text fields
+      const maxLength = name === "shopName" ? 50 : 200;
+      if (value.length > maxLength) return; // Prevent typing beyond limit
+    }
+
+    if (name === "shopEmail") {
+      // Email validation (basic pattern)
+      if (value && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
+        setError("Invalid email format");
+      } else {
+        setError(null);
+      }
+    }
+
+    if (name === "shopWebsite") {
+      // Website URL validation
+      if (
+        value &&
+        !/^(https?:\/\/)?([\w\d\-_]+\.+[A-Za-z]{2,})+\/?/.test(value)
+      ) {
+        setError("Invalid website URL");
+      } else {
+        setError(null);
+      }
+    }
+
     setFormData((prevState) => ({
       ...prevState,
       [name]: processedValue,
     }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.shopID === currentUser.shopID) return setError('ShopID already exists');
     setLoading(true);
 
     try {
@@ -119,6 +158,7 @@ const ShopCreate = () => {
       setLoading(false);
     }
   };
+  
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
       setUploading(true);
@@ -185,10 +225,21 @@ const ShopCreate = () => {
   return (
     <main className="p-3 max-w-4xl mx-auto mb-10">
       <h1 className="text-2xl text-center font-semibold mb-5">
-        Create a Shop Listing
+        {shopId ? "Update a Shop Listing" : "Create a Shop Listing"}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
+          <div>
+            <Label htmlFor="ownerID">Owner ID</Label>
+            <TextInput
+              type="text"
+              name="ownerID"
+              value={formData.ownerID}
+              onChange={handleChange}
+              required
+              readOnly
+            />
+          </div>
           <div>
             <Label htmlFor="shopID">Shop ID</Label>
             <TextInput
@@ -197,6 +248,7 @@ const ShopCreate = () => {
               value={formData.shopID}
               onChange={handleChange}
               required
+              readOnly
             />
           </div>
           <div>
@@ -230,24 +282,30 @@ const ShopCreate = () => {
             />
           </div>
           <div>
-  <Label htmlFor="shopCategory">Shop Category:</Label>
-  <select
-    id="shopCategory" // Add an id to the select element to match htmlFor in Label
-    name="shopCategory"
-    value={formData.shopCategory}
-    onChange={handleChange} // Ensure the handleChange is properly managing the state
-    required
-    className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-300"
-  >
-    <option value="" disabled>Select a category</option>
-    <option value="Clothing">Clothing</option>
-    <option value="Electronics">Electronics</option>
-    <option value="Groceries">Groceries</option>
-    <option value="Home Decor">Home Decor</option>
-    <option value="Books">Books</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
+            <Label htmlFor="shopCategory">Shop Category:</Label>
+            <select
+              id="shopCategory" // Add an id to the select element to match htmlFor in Label
+              name="shopCategory"
+              value={formData.shopCategory}
+              onChange={handleChange} // Ensure the handleChange is properly managing the state
+              required
+              className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-300"
+            >
+              <option value="" disabled>Select a category</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Home Decor">Home Decor</option>
+              <option value="Books">Books</option>
+              <option value="Food&Beverages">Food & Beverages</option>
+              <option value="Beauty&Health">Beauty & Health</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Sports&Fitness">Sports & Fitness</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Services">Services</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           <div>
             <Label htmlFor="shopPhone">Shop Phone:</Label>
@@ -256,6 +314,7 @@ const ShopCreate = () => {
               name="shopPhone"
               value={formData.shopPhone}
               onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -265,6 +324,7 @@ const ShopCreate = () => {
               name="shopEmail"
               value={formData.shopEmail}
               onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -283,6 +343,7 @@ const ShopCreate = () => {
               name="shopOpeningHours"
               value={formData.shopOpeningHours}
               onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -347,7 +408,7 @@ const ShopCreate = () => {
             gradientDuoTone="purpleToBlue"
             className="uppercase"
           >
-            {loading ? "Creating Shop..." : "Create Shop"}
+            { shopId ? "Update a Shop Listing" : "Create a Shop Listing"}
           </Button>
           {error && (
             <Alert className="mt-7 py-3 bg-gradient-to-r from-red-100 via-red-300 to-red-400 shadow-shadowOne text-center text-red-600 text-base tracking-wide animate-bounce">

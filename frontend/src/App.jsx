@@ -95,7 +95,7 @@ const App = () => {
           </Routes>
         </div>
 
-        <FooterComponent />
+        {/* <FooterComponent /> */}
         {showCart && <Cart />}
 
         {/* <FooterComponent /> */}

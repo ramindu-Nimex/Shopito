@@ -10,6 +10,7 @@ import {
   Select,
 } from "flowbite-react";
 import FooterComponent from "../FooterComponent";
+import { Link } from "react-router-dom";
 
 const ShoppingAssistant = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -148,7 +149,9 @@ const ShoppingAssistant = () => {
                     <p>Open: {product.isOpen ? "yes ✅" : "Closed ❌"}</p>
                     <p>Opening Hours: {product.shopOpeningHours} ⏰</p>
                     <Button className="mt-2" gradientDuoTone="purpleToBlue">
-                      🔗 Buy Now
+                      <Link to={"/marketPlace"}>
+                          🔗 Buy Now
+                      </Link>
                     </Button>
                     <div className="mt-8 bg-amber-100 dark:bg-slate-700 border-2 dark:border-teal-600  shadow-lg rounded-lg p-4">
                       <h2 className="text-center font-bold text-teal-600 text-2xl mb-5">
